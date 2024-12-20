@@ -1,0 +1,122 @@
+set cut_paste_input [stack 0]
+version 15.1 v4
+BackdropNode {
+ inputs 0
+ name BackdropNode1
+ tile_color 0x8e8e3800
+ label "<center>CG denoiser"
+ note_font_size 42
+ selected true
+ xpos 380
+ ypos -1351
+ bdwidth 596
+ bdheight 1092
+}
+push $cut_paste_input
+Unpremult {
+ channels all
+ name Unpremult2
+ selected true
+ xpos 753
+ ypos -1152
+}
+Dot {
+ name Dot14
+ selected true
+ xpos 787
+ ypos -1054
+}
+set Na196e000 [stack 0]
+Dot {
+ name Dot12
+ selected true
+ xpos 620
+ ypos -1054
+}
+set Na196e400 [stack 0]
+Dot {
+ name Dot3
+ selected true
+ xpos 500
+ ypos -1054
+}
+Dot {
+ name Dot11
+ selected true
+ xpos 500
+ ypos -571
+}
+push $Na196e400
+push $Na196e000
+add_layer {albedo albedo.red albedo.green albedo.blue}
+Shuffle2 {
+ fromInput1 {{0} B}
+ in1 albedo
+ fromInput2 {{0} B}
+ mappings "4 albedo.red 0 0 rgba.red 0 0 albedo.green 0 1 rgba.green 0 1 albedo.blue 0 2 rgba.blue 0 2 black -1 -1 rgba.alpha 0 3"
+ name albedo1
+ selected true
+ xpos 753
+ ypos -959
+}
+set Na196f000 [stack 0]
+Merge2 {
+ inputs 2
+ operation divide
+ name Merge6
+ selected true
+ xpos 586
+ ypos -959
+}
+Log2Lin {
+ operation lin2log
+ name Log2Lin1
+ selected true
+ xpos 586
+ ypos -891
+}
+NoOp {
+ name Denoiser
+ tile_color 0xff
+ note_font "Verdana Bold"
+ note_font_size 16
+ selected true
+ xpos 586
+ ypos -823
+}
+Log2Lin {
+ name Log2Lin2
+ selected true
+ xpos 586
+ ypos -749
+}
+Dot {
+ name Dot13
+ selected true
+ xpos 620
+ ypos -670
+}
+push $Na196f000
+Merge2 {
+ inputs 2
+ operation multiply
+ name Merge12
+ selected true
+ xpos 749
+ ypos -673
+}
+Copy {
+ inputs 2
+ from0 rgba.alpha
+ to0 rgba.alpha
+ name Copy2
+ selected true
+ xpos 749
+ ypos -580
+}
+Premult {
+ name Premult2
+ selected true
+ xpos 749
+ ypos -450
+}
