@@ -1,0 +1,15 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+NoOp {
+name emLoadReference
+knobChanged "import nuke\n\nk = nuke.thisKnob()\nn = nuke.thisNode()\n\nfilename_knob = n\['filename'].value()\nlock = n\['lock_reference'].value()\n\nif n\['lock_reference'].value() == True:\n    n\['filename'].setEnabled(False)\nelse:\n    n\['filename'].setEnabled(True)\n    n\['ref'].setValue(\"<img src=\"+ filename_knob + \">\")\n    print(filename_knob)"
+selected true
+xpos 1320
+ypos -327
+addUserKnob {20 User l emLoadReference}
+addUserKnob {6 lock_reference l "Lock Reference" t "Locks the file path directory and does not calculate all the time." +STARTLINE}
+addUserKnob {2 filename l file t "Add your file path here."}
+addUserKnob {26 "" +STARTLINE}
+addUserKnob {26 ref l "" +STARTLINE T "<img src=>"}
+addUserKnob {26 Autor l "" +STARTLINE T "<font color=\"grey\">emLoadReference v1.0 | emateofabregas.com | 2025 </font>"}
+}
