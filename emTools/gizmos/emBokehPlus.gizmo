@@ -1,0 +1,111 @@
+Gizmo {
+name emBokehPlus
+inputs 5
+knobChanged "import nuke\n\nn = nuke.thisNode()\nk = nuke.thisKnob()\n\n\ndef dPos(picker_knob, pos_knob, sampleNode):\n    pos = n\[picker_knob].value()\n    animated = nuke.thisKnob().isAnimated()\n            \n    # Check if proxy mode is active\n    if nuke.root().knob('proxy').value():\n        nuke.message('You have to disable proxy mode to use this feature.')\n        \n    #Sample the P_World AOV to get the position\n    else:\n        r = sampleNode.sample(n\['depthChannel'].value(),  pos\[0], pos\[1],)\n    \n    # Check the knob if it's animated               \n    if animated:\n        if not n.knob(pos_knob).isAnimated():\n            n.knob(pos_knob).setAnimated()\n        else:\n            n.knob(pos_knob).clearAnimated()\n                        \n    # Set the end_3d knob with the sampled values\n    n\[pos_knob].setValue(\[r])\n\n\ndepthChannel = n\ndPos('focal_point', 'focalPlane', depthChannel)"
+tile_color 0xc67f4bff
+addUserKnob {20 User l emBokehPlus}
+addUserKnob {41 bokehChannels l "Bokeh Channels" T Bokeh1.bokehChannels}
+addUserKnob {41 depthChannel l "Depth Channel" T Bokeh1.depthChannel}
+addUserKnob {41 outputType l "Output Type" T Bokeh1.outputType}
+addUserKnob {41 focusOutput l "Focus Region Output" T Bokeh1.focusOutput}
+addUserKnob {41 multiplier l Multiplier T Bokeh1.multiplier}
+addUserKnob {41 frontmultiplier l "Front Multiplier" T Bokeh1.frontmultiplier}
+addUserKnob {41 backmultiplier l "Back Multiplier" T Bokeh1.backmultiplier}
+addUserKnob {41 depthStyle l "Depth Style" T Bokeh1.depthStyle}
+addUserKnob {12 focal_point l "Focal Point"}
+focal_point {812 510}
+addUserKnob {41 focalPlane l "Focal Plane" T Bokeh1.focalPlane}
+addUserKnob {41 focusRegionSize l "Focus Region Size" T Bokeh1.focusRegionSize}
+addUserKnob {41 focusRegionFalloff l "Focus Region Falloff" T Bokeh1.focusRegionFalloff}
+addUserKnob {41 defocusMatteChannel l "Defocus Matte Channel" T Bokeh1.defocusMatteChannel}
+addUserKnob {41 normalizeVisualization l "Normalize Visualization" T Bokeh1.normalizeVisualization}
+addUserKnob {41 integrateFrontAndBackSeperately l "Integrate Deep Front and Back Separately" T Bokeh1.integrateFrontAndBackSeperately}
+addUserKnob {26 ""}
+addUserKnob {26 Autor l "" +STARTLINE T "<font color='grey'>emBokehPlus v1.1 | emateofabregas.com | 2025</font>"}
+addUserKnob {20 tab_lens l Lens}
+addUserKnob {41 realWorldLens l "Real World Lens Simulation" T Bokeh1.realWorldLens}
+addUserKnob {41 focalLength l "Focal Length" T Bokeh1.focalLength}
+addUserKnob {41 fStop l Aperture T Bokeh1.fStop}
+addUserKnob {41 worldScale l "World Scale" T Bokeh1.worldScale}
+addUserKnob {41 worldScaleMultiplier l "World Scale Multiplier" T Bokeh1.worldScaleMultiplier}
+addUserKnob {41 filmFormat l "Film Format" T Bokeh1.filmFormat}
+addUserKnob {41 apertureWidth l "Aperture Width" T Bokeh1.apertureWidth}
+addUserKnob {41 apertureHeight l "Aperture Height" T Bokeh1.apertureHeight}
+addUserKnob {20 tab_opticalArtifacts l "Optical Artifacts"}
+addUserKnob {41 bloom l Bloom T Bokeh1.bloom}
+addUserKnob {41 bloomCurvature l Curvature T Bokeh1.bloomCurvature}
+addUserKnob {41 bloomThreshold l "Bloom Threshold" T Bokeh1.bloomThreshold}
+addUserKnob {41 bloomMatteChannel l "Bloom Matte Channel" T Bokeh1.bloomMatteChannel}
+addUserKnob {41 kSphAbb l "Spherical Aberration" T Bokeh1.kSphAbb}
+addUserKnob {41 kChrAbb l "Chromic Aberration" T Bokeh1.kChrAbb}
+addUserKnob {41 kChrAbbOff l "Chromic Aberration Offset" T Bokeh1.kChrAbbOff}
+addUserKnob {41 chromicAberrationMatteChannel l "Chromic Aberration Matte Channel" T Bokeh1.chromicAberrationMatteChannel}
+addUserKnob {20 tab_kernel l Kernel}
+addUserKnob {41 kernelType l "Kernel Type" T Bokeh1.kernelType}
+addUserKnob {41 max_kernelsize l "Maximum Kernel Size" T Bokeh1.max_kernelsize}
+addUserKnob {41 expandBBoxToMaxKernelSize l "Expand Bounding Box To Max Kernel Size" -STARTLINE T Bokeh1.expandBBoxToMaxKernelSize}
+addUserKnob {41 missingKernelChannel l "Missing Kernel Channel" T Bokeh1.missingKernelChannel}
+addUserKnob {41 kAspectRatio l AspectRatio T Bokeh1.kAspectRatio}
+addUserKnob {41 kSoftness l Softness T Bokeh1.kSoftness}
+addUserKnob {41 kNumSides l "Blade Count" T Bokeh1.kNumSides}
+addUserKnob {41 kCurvature l Curvature T Bokeh1.kCurvature}
+addUserKnob {41 kRotation l Rotation T Bokeh1.kRotation}
+addUserKnob {20 tab_corrective_slices l "Corrective Slices"}
+addUserKnob {41 correctiveSlices l "Number of Corrective Slices" T Bokeh1.correctiveSlices}
+addUserKnob {41 overrideNearAndFarForSlices l "Override Near/Far" T Bokeh1.overrideNearAndFarForSlices}
+addUserKnob {41 depthSlicesNearAndFar l "Near and Far" T Bokeh1.depthSlicesNearAndFar}
+}
+Input {
+inputs 0
+name InputMattes
+label 4
+xpos 1367
+ypos -372
+number 4
+}
+Input {
+inputs 0
+name InputDeep_Input
+label 3
+xpos 1187
+ypos -372
+number 3
+}
+Input {
+inputs 0
+name InputCamera
+label 2
+xpos 1007
+ypos -372
+number 2
+}
+Input {
+inputs 0
+name InputKermel
+label 1
+xpos 827
+ypos -372
+number 1
+}
+Input {
+inputs 0
+name InputInput
+label "0\n"
+xpos 647
+ypos -372
+}
+Bokeh {
+inputs 5
+focalPlane 20.06148148
+worldScaleMultiplier 10
+kChrAbbOff {0.6000000238 1 1}
+name Bokeh1
+xpos 647
+ypos -261
+}
+Output {
+name Output1
+xpos 647
+ypos -210
+}
+end_group

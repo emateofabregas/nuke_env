@@ -1,6 +1,6 @@
 add_layer {P P.X P.Y P.Z P.x P.green P.blue P.alpha P.X P.red P.y P.z}
 add_layer {N N.X N.Y N.Z N.red N.green N.blue N.alpha}
-Gizmo {
+Group {
 name emMatte
 inputs 2
 onCreate "import nuke\n\n# Hidden extra position picker in Flare node (internally)\nflare_picker = nuke.toNode('Flare')\['position']\n\nif flare_picker:\n    flare_picker.setEnabled(False)\n    flare_picker.setVisible(False)"
@@ -20,7 +20,7 @@ addUserKnob {41 sharpness l "corner sharpness" +HIDDEN T Flare.sharpness}
 addUserKnob {41 corners_angle l angle +HIDDEN T Flare.corners_angle}
 addUserKnob {4 shape l Shape t "Choose the Shape here." M {Sphere Cube "" "" "" "" "" "" ""}}
 addUserKnob {12 position l Position t "For picking the position for your mask."}
-position {960 540}
+position {1144 120}
 addUserKnob {12 start l Start t "Place where the ramp starts (1)." +HIDDEN}
 start {780 370}
 addUserKnob {12 end l End t "Place where the ramp ends (0)." +HIDDEN}
@@ -58,7 +58,7 @@ addUserKnob {26 ""}
 addUserKnob {4 falloffType l "Falloff Type" t "Falloff algorithm." M {None Linear Cubic Quadratic Smooth Exponential "" "" "" "" "" "" "" "" "" "" "" ""}}
 falloffType Linear
 addUserKnob {7 falloff l Falloff t "A reduction (0-1) or decrease (+1)." R 0 4}
-falloff 1.01
+falloff 1
 addUserKnob {6 color_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
 color_panelDropped true
 addUserKnob {6 color_rgb_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
@@ -71,16 +71,15 @@ addUserKnob {41 invert_mask_1 l invert -STARTLINE T Merge8.invert_mask}
 addUserKnob {41 fringe_1 l fringe -STARTLINE T Merge8.fringe}
 addUserKnob {41 mix_1 l mix T Merge8.mix}
 addUserKnob {26 ""}
-addUserKnob {26 autor l "" +STARTLINE T "<font color=\"grey\">emMatte v1.1 | emateofabregas.com | 2024 </font>"}
+addUserKnob {26 autor l "" +STARTLINE T "<font color=\"grey\">emMatte v1.2 | emateofabregas.com | 2024 </font>"}
 addUserKnob {20 tab_tech_data l "Tech Data"}
 addUserKnob {41 in l P/Pref t "Set up your P or Pref AOVs here." T Input_AOV.in}
 addUserKnob {41 in_1 l N t "Add the N pass here." T Input_N.in}
-addUserKnob {6 show_hidden_knobs l "Show Hidden Knobs" +INVISIBLE +STARTLINE}
-addUserKnob {13 position_3d +HIDDEN}
-position_3d {-1.744539976 20.34937096 -0.9582386017}
-addUserKnob {13 start_3d +HIDDEN}
+addUserKnob {13 position_3d +INVISIBLE}
+position_3d {-8.502062798 -0.02499876171 -28.31233406}
+addUserKnob {13 start_3d +INVISIBLE}
 start_3d {-2.508849144 19.53207779 -0.4365825653}
-addUserKnob {13 end_3d +HIDDEN}
+addUserKnob {13 end_3d +INVISIBLE}
 end_3d {-1.794398665 19.08032036 -2.858861923}
 }
 Input {
@@ -95,19 +94,19 @@ name Dot3
 xpos 418
 ypos -160
 }
-set Ndc5ef800 [stack 0]
+set N62445400 [stack 0]
 Dot {
 name Dot6
 xpos 418
 ypos 275
 }
-set Ndc5efc00 [stack 0]
+set N62445800 [stack 0]
 Dot {
 name Dot1
 xpos 418
 ypos 720
 }
-set N9563c000 [stack 0]
+set N62445c00 [stack 0]
 Dot {
 name Dot4
 xpos -157
@@ -128,7 +127,7 @@ xpos -191
 ypos 790
 disable {{"\[exists parent.input1]"}}
 }
-push $Ndc5ef800
+push $N62445400
 AddChannels {
 channels alpha
 color 1
@@ -145,7 +144,7 @@ name Input_AOV
 xpos -392
 ypos -163
 }
-set N9563d000 [stack 0]
+set N624e6c00 [stack 0]
 Dot {
 name Dot5
 xpos -867
@@ -157,39 +156,39 @@ white {{parent.scale_xyz} {parent.scale_xyz} {parent.scale_xyz} 1}
 black_clamp false
 name scale_xyz
 xpos -901
-ypos 357
+ypos 307
 }
-set N9563d800 [stack 0]
+set N624e7400 [stack 0]
 Expression {
 channel3 rgba
 expr3 noise(r*(scale_master*0.01),g*(scale_master*0.01),b*(scale_master*0.01))
 name Pnoise
 xpos -795
-ypos 395
+ypos 363
 cached true
 addUserKnob {20 User}
 addUserKnob {7 scale_master l "scale master" R 0 1000}
 scale_master {{parent.scale_master*0.5}}
 }
-push $N9563d800
+push $N624e7400
 Expression {
 channel3 rgba
 expr3 "turbulence(r*scale_master, g*scale_master, b*scale_master, parent.octaves, parent.lacunarity, parent.gain)"
 name Turbulence
 xpos -901
-ypos 395
+ypos 363
 cached true
 addUserKnob {20 User}
 addUserKnob {7 scale_master l "scale master"}
 scale_master {{parent.scale_master*0.01}}
 }
-push $N9563d800
+push $N624e7400
 Expression {
 channel3 rgba
 expr3 "fBm (r*scale_master, g*scale_master, b*scale_master, parent.octaves, parent.lacunarity, parent.gain)"
 name Fbm
 xpos -1015
-ypos 393
+ypos 361
 cached true
 addUserKnob {20 User}
 addUserKnob {7 scale_master l "scale master" R 0 1000}
@@ -200,7 +199,7 @@ inputs 3
 which {{parent.noise_choice}}
 name Switch1
 xpos -901
-ypos 436
+ypos 422
 }
 Expression {
 expr3 "random (r*parent.random, g*parent.random, b*parent.random)"
@@ -230,7 +229,7 @@ name Constant1
 xpos 314
 ypos 285
 }
-push $Ndc5efc00
+push $N62445800
 Shuffle {
 in N
 in2 rgba
@@ -259,14 +258,14 @@ name luma_alpha
 xpos 194
 ypos 397
 }
-push $N9563d000
+push $N624e6c00
 Unpremult {
 name Unpremult1
 xpos -392
 ypos -109
 disable {{!parent.unpremultiply}}
 }
-set N517e800 [stack 0]
+set N6256a400 [stack 0]
 Add {
 channels rgb
 value {{"parent.matte_type == 3 ? -parent.Axis1.matrix.3 : -parent.Axis2.matrix.3 "} {"parent.matte_type == 3 ? -parent.Axis1.matrix.7 : -parent.Axis2.matrix.7"} {"parent.matte_type == 3 ? -parent.Axis1.matrix.11 : -parent.Axis2.matrix.11"} {curve}}
@@ -274,124 +273,35 @@ name Translate_Pivot1
 xpos -153
 ypos -109
 }
-ColorMatrix {
+Matrix {
+channels rgb
 matrix {
-    {{"parent.matte_type == 3 ? -parent.Axis1.matrix.0 : -parent.Axis2.matrix.0"} {"parent.matte_type == 3 ? -parent.Axis1.matrix.1 : -parent.Axis2.matrix.1 "} {"parent.matte_type == 3 ? -parent.Axis1.matrix.2 : -parent.Axis2.matrix.2 "}}
-    {{"parent.matte_type == 3 ? -parent.Axis1.matrix.4 : -parent.Axis2.matrix.4"} {"parent.matte_type == 3 ? -parent.Axis1.matrix.5 : -parent.Axis2.matrix.5"} {"parent.matte_type == 3 ? -parent.Axis1.matrix.6 : -parent.Axis2.matrix.6 "}}
-    {{"parent.matte_type == 3 ? -parent.Axis1.matrix.8 : -parent.Axis2.matrix.8"} {"parent.matte_type == 3 ? -parent.Axis1.matrix.9 : -parent.Axis2.matrix.9"} {"parent.matte_type == 3 ? -parent.Axis1.matrix.10 : -parent.Axis2.matrix.10 "}}
+    {{"parent.matte_type == 3 ? -parent.Axis1.matrix : -parent.Axis2.matrix"} {"parent.matte_type == 3 ? -parent.Axis1.matrix : -parent.Axis2.matrix"} {"parent.matte_type == 3 ? -parent.Axis1.matrix : -parent.Axis2.matrix"} {"parent.matte_type == 3 ? -parent.Axis1.matrix : -parent.Axis2.matrix"}}
+    {{"parent.matte_type == 3 ? -parent.Axis1.matrix : -parent.Axis2.matrix"} {"parent.matte_type == 3 ? -parent.Axis1.matrix : -parent.Axis2.matrix"} {"parent.matte_type == 3 ? -parent.Axis1.matrix : -parent.Axis2.matrix"} {"parent.matte_type == 3 ? -parent.Axis1.matrix : -parent.Axis2.matrix"}}
+    {{"parent.matte_type == 3 ? -parent.Axis1.matrix : -parent.Axis2.matrix"} {"parent.matte_type == 3 ? -parent.Axis1.matrix : -parent.Axis2.matrix"} {"parent.matte_type == 3 ? -parent.Axis1.matrix : -parent.Axis2.matrix"} {"parent.matte_type == 3 ? -parent.Axis1.matrix : -parent.Axis2.matrix"}}
+    {{"parent.matte_type == 3 ? -parent.Axis1.matrix : -parent.Axis2.matrix"} {"parent.matte_type == 3 ? -parent.Axis1.matrix : -parent.Axis2.matrix"} {"parent.matte_type == 3 ? -parent.Axis1.matrix : -parent.Axis2.matrix"} {"parent.matte_type == 3 ? -parent.Axis1.matrix : -parent.Axis2.matrix"}}
   }
-invert true
-name RotationScalesSkew_projection
+name MatrixProjection1
 xpos -153
 ypos 191
 }
-push $N517e800
-add_layer {matrix0 matrix0.0 matrix0.1 matrix0.2 matrix0.3}
-add_layer {matrix1 matrix1.0 matrix1.1 matrix1.2 matrix1.3}
-add_layer {matrix2 matrix2.0 matrix2.1 matrix2.2 matrix2.3}
-add_layer {matrix3 matrix3.0 matrix3.1 matrix3.2 matrix3.3}
-AddChannels {
-channels matrix0
-channels2 matrix1
-channels3 matrix2
-channels4 matrix3
-name AddChannels2
+push $N6256a400
+Dot {
+name Dot7
+xpos -2
+ypos -79
+}
+Matrix {
+channels rgb
+matrix {
+    {{parent.Axis1.world_matrix} {parent.Axis1.world_matrix} {parent.Axis1.world_matrix} {parent.Axis1.world_matrix}}
+    {{parent.Axis1.world_matrix} {parent.Axis1.world_matrix} {parent.Axis1.world_matrix} {parent.Axis1.world_matrix}}
+    {{parent.Axis1.world_matrix} {parent.Axis1.world_matrix} {parent.Axis1.world_matrix} {parent.Axis1.world_matrix}}
+    {{parent.Axis1.world_matrix} {parent.Axis1.world_matrix} {parent.Axis1.world_matrix} {parent.Axis1.world_matrix}}
+  }
+name MatrixProjection
 xpos -36
-ypos -75
-}
-set N517f400 [stack 0]
-Expression {
-channel0 {matrix0.0 -matrix0.1 -matrix0.2 -matrix0.3}
-expr0 Axis1.world_matrix.0
-channel1 {-matrix0.0 matrix0.1 -matrix0.2 -matrix0.3}
-expr1 Axis1.world_matrix.1
-channel2 {-matrix0.0 -matrix0.1 matrix0.2 -matrix0.3}
-expr2 Axis1.world_matrix.2
-channel3 {-matrix0.0 -matrix0.1 -matrix0.2 matrix0.3}
-expr3 Axis1.world_matrix.3
-name Matrix4_0
-xpos 85
-ypos -69
-}
-Expression {
-channel0 {matrix1.0 -matrix1.1 -matrix1.2 -matrix1.3}
-expr0 Axis1.world_matrix.4
-channel1 {-matrix1.0 matrix1.1 -matrix1.2 -matrix1.3}
-expr1 Axis1.world_matrix.5
-channel2 {-matrix1.0 -matrix1.1 matrix1.2 -matrix1.3}
-expr2 Axis1.world_matrix.6
-channel3 {-matrix1.0 -matrix1.1 -matrix1.2 matrix1.3}
-expr3 Axis1.world_matrix.7
-name Matrix4_1
-xpos 85
-ypos -33
-}
-Expression {
-channel0 {matrix2.0 -matrix2.1 -matrix2.2 -matrix2.3}
-expr0 Axis1.world_matrix.8
-channel1 {-matrix2.0 matrix2.1 -matrix2.2 -matrix2.3}
-expr1 Axis1.world_matrix.9
-channel2 {-matrix2.0 -matrix2.1 matrix2.2 -matrix2.3}
-expr2 Axis1.world_matrix.10
-channel3 {-matrix2.0 -matrix2.1 -matrix2.2 matrix2.3}
-expr3 Axis1.world_matrix.11
-name Matrix4_2
-xpos 85
-ypos 3
-}
-Expression {
-channel0 {matrix3.0 -matrix3.1 -matrix3.2 -matrix3.3}
-expr0 Axis1.world_matrix.12
-channel1 {-matrix3.0 matrix3.1 -matrix3.2 -matrix3.3}
-expr1 Axis1.world_matrix.13
-channel2 {-matrix3.0 -matrix3.1 matrix3.2 -matrix3.3}
-expr2 Axis1.world_matrix.14
-channel3 {-matrix3.0 -matrix3.1 -matrix3.2 matrix3.3}
-expr3 Axis1.world_matrix.15
-name Matrix4_3
-xpos 85
-ypos 39
-}
-set N3033a400 [stack 0]
-push $N3033a400
-push $N3033a400
-push $N3033a400
-push $N517f400
-Merge2 {
-inputs 2
-operation plus
-Achannels matrix0
-mix {{"parent.Axis1.world_matrix.0 == 1 ? 0 : (parent.Axis1.world_matrix.0 <=1 ? 1-parent.Axis1.world_matrix.0 : 1)"}}
-name Merge2
-xpos -36
-ypos -3
-}
-Merge2 {
-inputs 2
-operation plus
-Achannels matrix1
-mix {{"parent.Axis1.world_matrix.5 == 1 ? 0 : (parent.Axis1.world_matrix.5 <=1 ? 1-parent.Axis1.world_matrix.5 : 1)"}}
-name Merge3
-xpos -36
-ypos 39
-}
-Merge2 {
-inputs 2
-operation plus
-Achannels matrix2
-mix {{"parent.Axis1.world_matrix.10 == 1 ? 0 : (parent.Axis1.world_matrix.10 <=1 ? 1-parent.Axis1.world_matrix.10 : 1)"}}
-name Merge4
-xpos -36
-ypos 89
-}
-Merge2 {
-inputs 2
-operation plus
-Achannels matrix3
-mix {{"parent.Axis1.world_matrix.13 == 1 ? 0 : (parent.Axis1.world_matrix.13 <=1 ? 1-parent.Axis1.world_matrix.13 : 1)"}}
-name Merge9
-xpos -36
-ypos 140
+ypos 82
 }
 Switch {
 inputs 2
@@ -418,7 +328,7 @@ label "\[value filter]"
 xpos 207
 ypos 47
 }
-set N3033bc00 [stack 0]
+set N6256bc00 [stack 0]
 Flare {
 position {{root.width/2} {root.height/2}}
 inner_color 1
@@ -431,7 +341,7 @@ xpos 112
 ypos 103
 cached true
 }
-push $N3033bc00
+push $N6256bc00
 Rectangle {
 area {0 0 512 512}
 softness 100
@@ -439,7 +349,7 @@ name Box
 xpos 207
 ypos 128
 }
-push $N3033bc00
+push $N6256bc00
 Radial {
 area {0 0 512 512}
 name Radial
@@ -477,9 +387,9 @@ xpos -36
 ypos 397
 disable {{!parent.n_projection}}
 }
-set Nd1703c00 [stack 0]
-push $Nd1703c00
-push $N517e800
+set N625a3c00 [stack 0]
+push $N625a3c00
+push $N6256a400
 ColorMatrix {
 matrix {
     {1 0 0}
@@ -512,7 +422,7 @@ name start_normalize
 xpos -290
 ypos 229
 }
-push $N517e800
+push $N6256a400
 ColorMatrix {
 matrix {
     {1 0 0}
@@ -559,13 +469,13 @@ name Merge1
 xpos -391
 ypos 284
 }
-push $N517e800
+push $N6256a400
 Add {
 channels rgb
 value {{-parent.position_3d.x} {-parent.position_3d.y} {-parent.position_3d.z} 0}
 name Sample
 xpos -619
-ypos -43
+ypos -28
 cached true
 }
 Add {
@@ -573,20 +483,20 @@ channels rgb
 value {{-parent.Axis2.matrix.3} {-parent.Axis2.matrix.7} {-parent.Axis2.matrix.11} {curve}}
 name Translate_Pivot
 xpos -619
-ypos 53
+ypos 51
 }
 ColorMatrix {
 matrix {
-    {{parent.Axis2.matrix.0} {parent.Axis2.matrix.1} {parent.Axis2.matrix.2}}
-    {{parent.Axis2.matrix.4} {parent.Axis2.matrix.5} {parent.Axis2.matrix.6}}
-    {{parent.Axis2.matrix.8} {parent.Axis2.matrix.9} {parent.Axis2.matrix.10}}
+    {{parent.Axis2.world_matrix.0} {parent.Axis2.world_matrix.1} {parent.Axis2.world_matrix.2}}
+    {{parent.Axis2.world_matrix.4} {parent.Axis2.world_matrix.5} {parent.Axis2.world_matrix.6}}
+    {{parent.Axis2.world_matrix.8} {parent.Axis2.world_matrix.9} {parent.Axis2.world_matrix.10}}
   }
 invert true
 name RotationScalesSkew
 xpos -619
-ypos 136
+ypos 125
 }
-set N6c7e7000 [stack 0]
+set Na13c4400 [stack 0]
 Expression {
 channel3 rgba
 expr3 1-max(abs(r),abs(g),abs(b))
@@ -595,7 +505,7 @@ xpos -619
 ypos 215
 cached true
 }
-push $N6c7e7000
+push $Na13c4400
 Expression {
 channel3 rgba
 expr3 1-(sqrt((r*r)+(g*g)+(b*b)))
@@ -604,6 +514,7 @@ xpos -731
 ypos 213
 cached true
 }
+set N62635400 [stack 0]
 Switch {
 inputs 2
 which {{parent.shape}}
@@ -634,7 +545,7 @@ name Falloff
 xpos -391
 ypos 594
 }
-set N4a6f4000 [stack 0]
+set N62635c00 [stack 0]
 Expression {
 channel3 rgba
 expr3 pow(a,parent.exp)
@@ -642,7 +553,7 @@ name Exponential
 xpos -157
 ypos 663
 }
-push $N4a6f4000
+push $N62635c00
 Expression {
 channel3 rgba
 expr3 smoothstep(0,1,a)
@@ -650,7 +561,7 @@ name Smooth
 xpos -254
 ypos 663
 }
-push $N4a6f4000
+push $N62635c00
 Expression {
 channel3 rgba
 expr3 pow2(a),0,1
@@ -658,7 +569,7 @@ name Quadratic
 xpos -349
 ypos 661
 }
-push $N4a6f4000
+push $N62635c00
 Expression {
 channel3 rgba
 expr3 clamp((a**3),0,1)
@@ -667,13 +578,13 @@ name Cubic
 xpos -445
 ypos 663
 }
-push $N4a6f4000
+push $N62635c00
 NoOp {
 name Lineal
 xpos -538
 ypos 664
 }
-push $N4a6f4000
+push $N62635c00
 Expression {
 channel3 rgba
 expr3 a*abs(x)
@@ -715,7 +626,7 @@ label "\[value channels]"
 xpos -81
 ypos 856
 }
-push $N9563c000
+push $N62445c00
 Copy {
 inputs 2
 from0 rgba.alpha
@@ -737,14 +648,6 @@ ypos 1006
 }
 Axis3 {
 inputs 0
-uniform_scale 10
-name Axis2
-label Generic
-xpos -98
-ypos -10
-}
-Axis3 {
-inputs 0
 translate {{"\[exists parent.input2.translate.x] ? parent.input2.translate.x : 0"} {"\[exists parent.input2.translate.y] ? parent.input2.translate.y : 0"} {"\[exists parent.input2.translate.z] ? parent.input2.translate.z : 0"}}
 rotate {{"\[exists parent.input2.rotate.x] ? parent.input2.rotate.x : 0"} {"\[exists parent.input2.rotate.y] ? parent.input2.rotate.y : 0"} {"\[exists parent.input2.rotate.z] ? parent.input2.rotate.z : 0"}}
 scaling {{"\[exists parent.input2.scale.x] ? parent.input2.scale.x : 1"} {"\[exists parent.input2.scale.y] ? parent.input2.scale.y : 1"} {"\[exists parent.input2.scale.z] ? parent.input2.scale.z : 1"}}
@@ -757,16 +660,24 @@ label Projection
 xpos 225
 ypos -48
 }
-push $N9563d000
-push 0
+Axis3 {
+inputs 0
+uniform_scale 10
+name Axis2
+label Generic
+xpos -98
+ypos -10
+}
+push $N62635400
+push $N62635400
 Viewer {
 inputs 2
-frame_range 1-150
+frame_range 1-120
 input_number 1
 viewerProcess "sRGB (ACES)"
-monitorOutNDISenderName "NukeX - emTools_v039 - Viewer1"
+monitorOutNDISenderName "NukeX - emTools_v047 - Viewer1"
 name Viewer1
-xpos -509
-ypos 215
+xpos -510
+ypos 324
 }
 end_group

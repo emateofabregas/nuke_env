@@ -1,0 +1,23 @@
+Gizmo {
+name emUnpremultAlpha
+addUserKnob {20 User l "emUnpremult Alpha"}
+addUserKnob {26 autor l "" +STARTLINE T "<font color=\"grey\"> emUnpremult Alpha v1.1 | emateofabregas.com | 2024 </font>"}
+}
+Input {
+inputs 0
+name InputImg
+xpos 647
+ypos 211
+}
+Expression {
+expr3 a>0?a/a:a
+name UnPremult_Alpha
+xpos 647
+ypos 251
+}
+Output {
+name Output1
+xpos 647
+ypos 292
+}
+end_group

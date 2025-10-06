@@ -1,0 +1,590 @@
+Gizmo {
+name emArtisticLens
+inputs 2
+knobChanged "import nuke\n\nn = nuke.thisNode()\nk = nuke.thisKnob()\n\nif n.input(1):\n    n.knobs()\['projection_mode'].setEnabled(False)\n    n.knobs()\['world_to_meters'].setEnabled(False)\n    n.knobs()\['focal'].setEnabled(False)\n    n.knobs()\['haperture'].setEnabled(False)\n    n.knobs()\['vaperture'].setEnabled(False)\n    n.knobs()\['near'].setEnabled(False)\n    n.knobs()\['far'].setEnabled(False)\n    n.knobs()\['win_translate'].setEnabled(False)\n    n.knobs()\['win_scale'].setEnabled(False)\n    n.knobs()\['winroll'].setEnabled(False)\n    n.knobs()\['focal_point'].setEnabled(False)\n    n.knobs()\['fstop'].setEnabled(False)\n    n.knobs()\['shutter'].setEnabled(False)\n    n.knobs()\['shutteroffset'].setEnabled(False)\n    n.knobs()\['shutter_bias'].setEnabled(False)\nelse:\n    n.knobs()\['projection_mode'].setEnabled(True)\n    n.knobs()\['world_to_meters'].setEnabled(True)\n    n.knobs()\['focal'].setEnabled(True)\n    n.knobs()\['haperture'].setEnabled(True)\n    n.knobs()\['vaperture'].setEnabled(True)\n    n.knobs()\['near'].setEnabled(True)\n    n.knobs()\['far'].setEnabled(True)\n    n.knobs()\['win_translate'].setEnabled(True)\n    n.knobs()\['win_scale'].setEnabled(True)\n    n.knobs()\['winroll'].setEnabled(True)\n    n.knobs()\['focal_point'].setEnabled(True)\n    n.knobs()\['fstop'].setEnabled(True)\n    n.knobs()\['shutter'].setEnabled(True)\n    n.knobs()\['shutteroffset'].setEnabled(True)\n    n.knobs()\['shutter_bias'].setEnabled(True)\n\nif k.name() == 'lens':\n    g = nuke.toNode('emGlow')  \n    if n\['lens'] == 0:\n        g\['type'].setValue('Simple')\n    else:\n        g\['type'].setValue('Anamorphic')\n        \nif k.name() == 'enable_grain':\n    if n.knob('enable_grain').getValue() == 0:\n        n.knobs()\['seed'].setEnabled(False)\n        n.knobs()\['presets'].setEnabled(False)\n        n.knobs()\['red_size'].setEnabled(False)\n        n.knobs()\['green_size'].setEnabled(False)\n        n.knobs()\['blue_size'].setEnabled(False)\n        n.knobs()\['red_i'].setEnabled(False)\n        n.knobs()\['green_i'].setEnabled(False)\n        n.knobs()\['blue_i'].setEnabled(False)\n        n.knobs()\['red_m'].setEnabled(False)\n        n.knobs()\['green_m'].setEnabled(False)\n        n.knobs()\['blue_m'].setEnabled(False)\n        n.knobs()\['black'].setEnabled(False)\n        n.knobs()\['minimum'].setEnabled(False)\n        n.knobs()\['maskgrain'].setEnabled(False)\n        n.knobs()\['maskinvert'].setEnabled(False)\n    else:\n        n.knobs()\['seed'].setEnabled(True)\n        n.knobs()\['presets'].setEnabled(True)\n        n.knobs()\['red_size'].setEnabled(True)\n        n.knobs()\['green_size'].setEnabled(True)\n        n.knobs()\['blue_size'].setEnabled(True)\n        n.knobs()\['red_i'].setEnabled(True)\n        n.knobs()\['green_i'].setEnabled(True)\n        n.knobs()\['blue_i'].setEnabled(True)\n        n.knobs()\['red_m'].setEnabled(True)\n        n.knobs()\['green_m'].setEnabled(True)\n        n.knobs()\['blue_m'].setEnabled(True)\n        n.knobs()\['black'].setEnabled(True)\n        n.knobs()\['minimum'].setEnabled(True)\n        n.knobs()\['maskgrain'].setEnabled(True)\n        n.knobs()\['maskinvert'].setEnabled(True)"
+tile_color 0xa477a8ff
+label "\[value lens]\n"
+note_font Verdana
+addUserKnob {20 lens_tab l Lens}
+addUserKnob {4 lens l Lens t "Lens Type" M {Spherical Anamorphic "" "" "" ""}}
+addUserKnob {26 ""}
+addUserKnob {6 enable_bloom l "Enable Bloom" t "Enable Bloom." -STARTLINE}
+enable_bloom true
+addUserKnob {7 bloom t "Bloom slider." R 0 5}
+bloom 1
+addUserKnob {6 enable_vignette l "Enable Vignette" t "Enable Vignette." +STARTLINE}
+enable_vignette true
+addUserKnob {41 opacity T emVignette.opacity}
+addUserKnob {6 enable_lens l "Enable Lens" t "Enable Lens." +STARTLINE}
+enable_lens true
+addUserKnob {7 intensity t "Intensity Lens Slider." R 0 4}
+intensity 1
+addUserKnob {6 enable_exposure l "Enable Exposure" t "Enable Exposure." +STARTLINE}
+enable_exposure true
+addUserKnob {7 exposure t "Exposure slider." R -5 5}
+addUserKnob {26 ""}
+addUserKnob {41 overscan T emVignette.overscan}
+addUserKnob {41 crop l "Enable Crop" -STARTLINE T emVignette.crop}
+addUserKnob {26 ""}
+addUserKnob {26 Autor l "" +STARTLINE T "<font color=\"grey\">emArtisticLens v1.6 | emateofabregas.com | 2024 </font>"}
+addUserKnob {20 Camera}
+addUserKnob {41 projection_mode l Projection +DISABLED T ShotCam.projection_mode}
+addUserKnob {41 world_to_meters l "World to Meters" -STARTLINE +DISABLED T ShotCam.world_to_meters}
+addUserKnob {41 focal l "Focal Length" +DISABLED T ShotCam.focal}
+addUserKnob {41 haperture l "Horizontal Aperture" +DISABLED T ShotCam.haperture}
+addUserKnob {41 vaperture l "Vertical Aperture" +DISABLED T ShotCam.vaperture}
+addUserKnob {41 near l Near +DISABLED T ShotCam.near}
+addUserKnob {41 far l Far +DISABLED T ShotCam.far}
+addUserKnob {41 win_translate l "Window Translate" +DISABLED T ShotCam.win_translate}
+addUserKnob {41 win_scale l "Window Scale" +DISABLED T ShotCam.win_scale}
+addUserKnob {41 winroll l "Window Roll" +DISABLED T ShotCam.winroll}
+addUserKnob {41 focal_point l "Focal Distance" +DISABLED T ShotCam.focal_point}
+addUserKnob {41 fstop l Fstop +DISABLED T ShotCam.fstop}
+addUserKnob {41 shutter l Shutter +DISABLED T ShotCam.shutter}
+addUserKnob {41 shutteroffset l "Shutter Offset" +DISABLED T ShotCam.shutteroffset}
+addUserKnob {41 shuttercustomoffset l "" -STARTLINE T ShotCam.shuttercustomoffset}
+addUserKnob {41 shutter_bias l Bias +DISABLED T ShotCam.shutter_bias}
+addUserKnob {20 grain_tab l Grain}
+addUserKnob {6 enable_grain l "Enable Grain" t "Enable Grain." +STARTLINE}
+enable_grain true
+addUserKnob {41 seed T Grain.seed}
+addUserKnob {41 presets l "" -STARTLINE T Grain.presets}
+addUserKnob {26 "" l "@b;Size"}
+addUserKnob {41 red_size l red T Grain.red_size}
+addUserKnob {41 green_size l green T Grain.green_size}
+addUserKnob {41 blue_size l blue T Grain.blue_size}
+addUserKnob {26 "" l "@b;Irregularity"}
+addUserKnob {41 red_i l red T Grain.red_i}
+addUserKnob {41 green_i l green T Grain.green_i}
+addUserKnob {41 blue_i l blue T Grain.blue_i}
+addUserKnob {26 "" l "@b;Intensity"}
+addUserKnob {41 red_m l red T Grain.red_m}
+addUserKnob {41 green_m l green T Grain.green_m}
+addUserKnob {41 blue_m l blue T Grain.blue_m}
+addUserKnob {41 black T Grain.black}
+addUserKnob {41 minimum T Grain.minimum}
+addUserKnob {26 "" l "@b;Mask"}
+addUserKnob {41 maskgrain l "Apply only through alpha" -STARTLINE T Grain.maskgrain}
+addUserKnob {41 maskinvert l "Invert alpha" -STARTLINE T Grain.maskinvert}
+}
+Input {
+inputs 0
+name InputImg
+xpos 0
+ypos 44
+}
+Reformat {
+format "1920 816 0 0 1920 816 0.5 anamorphic"
+resize distort
+black_outside true
+name Reformat1
+xpos 0
+ypos 85
+}
+set N2eb93800 [stack 0]
+Shuffle {
+red black
+green black
+alpha black
+name blue_channel
+xpos 132
+ypos 91
+}
+LensDistortion2 {
+lens Anamorphic
+distortionDenominator0 {{"\[exists parent.Expressions.blue_anam] ? parent.Expressions.blue_sph : parent.Expressions.blue_sph"}}
+distortionDenominator1 {{emArtisticLens.Expressions.blue_channel}}
+distortionDenominatorX00 {{emArtisticLens.Expressions.blue_channel}}
+output Undistort
+outputBBox {1 -2 1919 818}
+bboxBackup {0 0 1920 816}
+bboxBackupSet true
+featuresKnob "
+version 1
+entries 0
+entries 0
+"
+distortionModelDisplayX "xu = xd / (1 + k0 * rd^2 + k1 * rd^4 + k2 * yd^2)"
+distortionModelDisplayY "yu = yd / (1 + k0 * rd^2 + k1 * rd^4 + k3 * xd^2)"
+name LensDistortion3
+xpos 132
+ypos 188
+disable {{!parent.enable_lens}}
+}
+push 0
+push $N2eb93800
+Shuffle {
+red black
+blue black
+alpha black
+name green_channel
+xpos 0
+ypos 135
+}
+LensDistortion2 {
+lens Anamorphic
+distortionDenominator0 {{"\[exists parent.Expressions.green_anam] ? parent.Expressions.green_sph : parent.Expressions.green_sph"}}
+distortionDenominator1 {{"\[exists parent.Expressions.green_anam] ? parent.Expressions.green_sph : parent.Expressions.green_sph"}}
+distortionDenominatorX00 {{"\[exists parent.Expressions.green_anam] ? parent.Expressions.green_sph : parent.Expressions.green_sph"}}
+output Undistort
+outputBBox {-1 -3 1921 819}
+bboxBackup {0 0 1920 816}
+bboxBackupSet true
+featuresKnob "
+version 1
+entries 0
+entries 0
+"
+distortionModelDisplayX "xu = xd / (1 + k0 * rd^2 + k1 * rd^4 + k2 * yd^2)"
+distortionModelDisplayY "yu = yd / (1 + k0 * rd^2 + k1 * rd^4 + k3 * xd^2)"
+name LensDistortion2
+xpos 0
+ypos 184
+disable {{!parent.enable_lens}}
+}
+push $N2eb93800
+Shuffle {
+green black
+blue black
+name red_channel
+xpos -135
+ypos 91
+disable {{!parent.enable_lens}}
+}
+LensDistortion2 {
+lens Anamorphic
+distortionDenominator0 {{"\[exists parent.Expressions.red_anam] ? parent.Expressions.red_sph : parent.Expressions.red_sph"}}
+distortionDenominator1 {{"\[exists parent.Expressions.red_anam] ? parent.Expressions.red_sph : parent.Expressions.red_sph"}}
+distortionDenominatorX00 {{"\[exists parent.Expressions.red_anam] ? parent.Expressions.red_sph : parent.Expressions.red_sph"}}
+output Undistort
+outputBBox {-3 -3 1923 819}
+bboxBackup {3 -3 1917 819}
+bboxBackupSet true
+featuresKnob "
+version 1
+entries 0
+entries 0
+"
+distortionModelDisplayX "xu = xd / (1 + k0 * rd^2 + k1 * rd^4 + k2 * yd^2)"
+distortionModelDisplayY "yu = yd / (1 + k0 * rd^2 + k1 * rd^4 + k3 * xd^2)"
+name LensDistortion1
+xpos -135
+ypos 185
+disable {{parent.enable_lens}}
+}
+Merge2 {
+inputs 3+1
+name Merge1
+xpos 0
+ypos 251
+disable {{!parent.enable_lens}}
+}
+LensDistortion2 {
+lens Anamorphic
+distortionDenominator0 {{parent.Expressions.red_channel*4}}
+distortionDenominator1 {{parent.Expressions.green_channel*4}}
+distortionDenominatorX00 {{parent.Expressions.blue_channel*4}}
+distortionDenominatorY00 {{"\[exists parent.Expressions.y_anam] ? parent.Expressions.y_sph : parent.Expressions.y_sph"}}
+output Undistort
+outputBBox {0 -2 1920 818}
+bboxBackup {2 -207 1918 1023}
+bboxBackupSet true
+featuresKnob "
+version 1
+entries 0
+entries 0
+"
+distortionModelDisplayX "xu = xd / (1 + k0 * rd^2 + k1 * rd^4 + k2 * yd^2)"
+distortionModelDisplayY "yu = yd / (1 + k0 * rd^2 + k1 * rd^4 + k3 * xd^2)"
+name LensDistortion4
+xpos 0
+ypos 300
+disable {{!parent.enable_lens}}
+}
+Transform {
+scale {{"1+(0.25 *parent.Expressions.red_sph)/45*intensity+0.05 ? 1+(0.25 *parent.Expressions.green_sph)/45*intensity+0.05 : 1+(0.25 *parent.Expressions.blue_sph)/45*intensity+0.05"}}
+center {{width/2} {height/2}}
+name Transform1
+xpos 0
+ypos 356
+disable {{!parent.enable_lens}}
+}
+Group {
+name emVignette
+tile_color 0x191919ff
+xpos 0
+ypos 407
+disable {{!parent.enable_vignette}}
+addUserKnob {20 User l emVignette}
+addUserKnob {41 value l tint t "Color on Vigentte. For more photorealistic result, please use values between 0,2 and 0,5." T Multiply1.value}
+addUserKnob {41 opacity t "Opacity on vignette." T Shape.opacity}
+addUserKnob {41 scale t "Scale in vignette." T Scale.scale}
+addUserKnob {41 softness t "Smooth in vignette." T Shape.softness}
+addUserKnob {41 plinear l "perceptually linear" t "Linear algorithm." -STARTLINE T Shape.plinear}
+addUserKnob {26 ""}
+addUserKnob {7 overscan t "How many percent of the crop is overscanning." R 0 100}
+overscan 20
+addUserKnob {6 crop t "Cropping overscan. " -STARTLINE}
+addUserKnob {26 ""}
+addUserKnob {26 autor l "" +STARTLINE T "<font color=\"grey\">emVignette v1.1 | emateofabregas.com | 2024 </font>"}
+}
+Radial {
+inputs 0
+output alpha
+invert true
+area {0 0 {width} {height}}
+name Shape
+xpos 118
+ypos 7
+}
+Transform {
+scale {{"1+(0.025 *Expressions.red_sph)/45*intensity ? 1+(0.025 *Expressions.green_sph)/45*intensity : 1+(0.025 *Expressions.blue_sph)/45*intensity"}}
+center {1024 435.5}
+black_outside false
+name Scale
+xpos 118
+ypos 52
+addUserKnob {20 User}
+addUserKnob {41 center_1 l center +INVISIBLE T Scale.center}
+}
+Crop {
+box {{parent.crop?0:-parent.overscan} {parent.crop?0:-parent.overscan} {parent.crop?width:width+parent.overscan} {parent.crop?height:height+parent.overscan}}
+name CropOverscan
+xpos 118
+ypos 86
+}
+Input {
+inputs 0
+name InputImg
+xpos 0
+}
+Multiply {
+inputs 1+1
+channels rgb
+value {0.6 0.6 0.6 1}
+value_panelDropped true
+name Multiply1
+xpos 0
+ypos 86
+}
+Output {
+name Output1
+xpos 0
+ypos 160
+}
+end_group
+Reformat {
+resize distort
+name Reformat2
+xpos 0
+ypos 447
+}
+Group {
+name emGlow
+tile_color 0xf2873aff
+label "\[value type]"
+xpos 0
+ypos 504
+disable {{!parent.enable_bloom}}
+addUserKnob {20 User l emGlow}
+addUserKnob {6 view_glow l "View Glow" t "View Glow Effect." +STARTLINE}
+addUserKnob {26 ""}
+addUserKnob {4 type t "Simple is a standard glow. Anamorphic size in w size is over than h." M {Simple Anamorphic "" "" ""}}
+type Anamorphic
+addUserKnob {7 intensity t "Glow intensity." R 0 10}
+intensity {{parent.bloom/2}}
+addUserKnob {6 tint_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
+tint_panelDropped true
+addUserKnob {6 color_rgb_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+color_rgb_panelDropped true
+addUserKnob {41 value l tint t "Color of the Glow." T Tint.value}
+addUserKnob {7 size t "Glow size." R 0 100}
+size {{bloom*25}}
+addUserKnob {7 tolerance t "\"Contrast\" in black values." R 0 2}
+addUserKnob {41 black_clamp l clamp -STARTLINE T Grade.black_clamp}
+addUserKnob {41 maximum l highlights t "Range in highlights" T Clamp.maximum}
+addUserKnob {41 white_clamp l clamp t "Output more than white, is changed to 1" -STARTLINE T Clamp.maximum_enable}
+addUserKnob {26 gap_1 l " " T " "}
+addUserKnob {26 _1 l mask T ""}
+addUserKnob {41 maskChannelInput l "" -STARTLINE T Merge3.maskChannelInput}
+addUserKnob {41 inject -STARTLINE T Merge3.inject}
+addUserKnob {41 invert_mask l invert -STARTLINE T Merge3.invert_mask}
+addUserKnob {41 fringe -STARTLINE T Merge3.fringe}
+addUserKnob {41 mix T Merge3.mix}
+addUserKnob {26 gap_2 l " " T " "}
+addUserKnob {7 overscan t "How many percent of the crop is overscanning." R 0 100}
+overscan 10
+addUserKnob {6 crop l "Enable Crop" t "Cropping overscan. " -STARTLINE}
+addUserKnob {26 ""}
+addUserKnob {26 Autor l "" +STARTLINE T "<font color=\"grey\">emGlow v1.2 | emateofabregas.com | 2024 </font>"}
+}
+Input {
+inputs 0
+name InputMask
+xpos 106
+ypos 37
+number 1
+}
+Input {
+inputs 0
+name InputImg
+xpos 0
+ypos 36
+}
+Dot {
+name Dot1
+xpos 34
+ypos 83
+}
+set N55fd4c00 [stack 0]
+Merge2 {
+inputs 2
+operation mask
+name Merge3
+xpos 106
+ypos 80
+disable {{"!\[exists parent.input1]"}}
+}
+set N55fd5000 [stack 0]
+push $N55fd5000
+Grade {
+inputs 1+1
+white {{0.0001+parent.intensity*0.05}}
+add {{-parent.tolerance*0.001}}
+black_clamp false
+maskChannelMask none
+name Grade
+xpos 106
+ypos 110
+}
+Clamp {
+channels rgba
+minimum_enable false
+maximum {{bloom*1.1}}
+maximum_enable false
+maskChannelMask none
+name Clamp
+xpos 106
+ypos 139
+}
+set N55fd5800 [stack 0]
+Blur {
+channels rgba
+size {{parent.BlurMaster.size*10} {parent.BlurMaster.size*10}}
+crop false
+name Blur10
+xpos 1010
+ypos 181
+}
+push $N55fd5800
+Blur {
+channels rgba
+size {{parent.BlurMaster.size*9} {parent.BlurMaster.size*9}}
+crop false
+name Blur9
+xpos 911
+ypos 180
+}
+push $N55fd5800
+Blur {
+channels rgba
+size {{parent.BlurMaster.size*8} {parent.BlurMaster.size*8}}
+crop false
+name Blur8
+xpos 813
+ypos 179
+}
+push $N55fd5800
+Blur {
+channels rgba
+size {{parent.BlurMaster.size*7} {parent.BlurMaster.size*7}}
+crop false
+name Blur7
+xpos 711
+ypos 181
+}
+push $N55fd5800
+Blur {
+channels rgba
+size {{parent.BlurMaster.size*6} {parent.BlurMaster.size*6}}
+crop false
+name Blur6
+xpos 611
+ypos 182
+}
+push $N55fd5800
+Blur {
+channels rgba
+size {{parent.BlurMaster.size*4} {parent.BlurMaster.size*4}}
+crop false
+name Blur4
+xpos 410
+ypos 179
+}
+push $N55fd5800
+Blur {
+channels rgba
+size {{parent.BlurMaster.size*5} {parent.BlurMaster.size*5}}
+crop false
+name Blur5
+xpos 504
+ypos 179
+}
+push $N55fd5800
+Blur {
+channels rgba
+size {{parent.BlurMaster.size*2} {parent.BlurMaster.size*2}}
+crop false
+name Blur2
+xpos 213
+ypos 179
+}
+push 0
+push $N55fd5800
+Blur {
+channels rgba
+size {{parent.size} {parent.type?parent.BlurMaster.size.w*0.5:parent.BlurMaster.size.w}}
+crop false
+name BlurMaster
+xpos 106
+ypos 179
+}
+push $N55fd5800
+Blur {
+channels rgba
+size {{parent.BlurMaster.size*3} {parent.BlurMaster.size*3}}
+crop false
+name Blur3
+xpos 317
+ypos 178
+}
+Merge2 {
+inputs 10+1
+operation plus
+name MergeBlur
+xpos 106
+ypos 232
+}
+Multiply {
+channels rgba
+value {{bloom*1.05} {bloom*1.05} {bloom*1.05} 1}
+maskChannelInput -rgba.alpha
+name Tint
+xpos 106
+ypos 271
+}
+set N56058800 [stack 0]
+push $N55fd4c00
+Merge2 {
+inputs 2
+operation plus
+Achannels rgb
+name MergeGlow
+xpos 0
+ypos 271
+disable {{"parent.intensity == 0"}}
+}
+push $N56058800
+Switch {
+inputs 2
+which 1
+name view_glow
+xpos 0
+ypos 306
+disable {{parent.view_glow}}
+}
+Crop {
+box {{parent.crop?0:-parent.overscan} {parent.crop?0:-parent.overscan} {parent.crop?width:width+parent.overscan} {parent.crop?height:height+parent.overscan}}
+name CropOverscan
+xpos 0
+ypos 335
+}
+Output {
+name Output1
+xpos 0
+ypos 368
+}
+end_group
+EXPTool {
+mode Stops
+red {{parent.exposure}}
+green {{parent.Exposure1.red}}
+blue {{parent.Exposure1.red}}
+name Exposure1
+selected true
+xpos 0
+ypos 554
+disable {{!parent.enable_exposure}}
+}
+Grain2 {
+name Grain
+label "Kodak 5218"
+xpos 0
+ypos 578
+disable {{!parent.enable_grain}}
+red_size 0.1
+green_size 1.6
+blue_size 1.91
+green_i 0.86
+blue_i 0.73
+red_m 0.38
+green_m 0.17
+blue_m 0.87
+minimum {0 0 0}
+}
+Crop {
+box {{parent.crop?0:-parent.overscan} {parent.crop?0:-parent.overscan} {parent.crop?width:width+parent.overscan} {parent.crop?height:height+parent.overscan}}
+name CropOverscan
+xpos 0
+ypos 656
+}
+Output {
+name Output1
+xpos 0
+ypos 708
+}
+Input {
+inputs 0
+name InputCamera
+xpos -311
+ypos 105
+number 1
+}
+Camera3 {
+inputs 0
+focal 85
+focal_point 0.79
+fstop 1
+name ShotCam
+xpos -425
+ypos 118
+}
+NoOp {
+inputs 0
+name Expressions
+xpos -302
+ypos 174
+addUserKnob {20 User l "Expressions panel"}
+addUserKnob {7 focal l "focal anam" R 0 200}
+focal {{"\[exists parent.input1.focal] ? parent.input1.focal : parent.ShotCam.focal"}}
+addUserKnob {7 red_channel l "red anam"}
+red_channel {{"0 + (0.025 * parent.Expressions.focal)/800*intensity\n\n\n"}}
+addUserKnob {7 green_channel l "green anam"}
+green_channel {{"0 + (0.05  * parent.Expressions.focal)/800*intensity"}}
+addUserKnob {7 blue_channel l "blue anam"}
+blue_channel {{"0 + (0.1  * parent.Expressions.focal)/800*intensity\n"}}
+addUserKnob {7 y_anam l "y anam" R 0 10}
+y_anam {{"-(0 + (0.15 *parent.Expressions.focal) /15)*intensity\n\n\n\n\n"}}
+addUserKnob {26 ""}
+addUserKnob {7 focal_sph l "focal sph" R 0 200}
+focal_sph {{"\[exists parent.input1.focal] ? parent.input1.focal : parent.ShotCam.focal"}}
+addUserKnob {7 red_sph l "red sph"}
+red_sph {{"0 + (0.000015 *parent.Expressions.focal_sph)*intensity"}}
+addUserKnob {7 green_sph l "green sph"}
+green_sph {{"0 + (0.00009 * parent.Expressions.focal_sph)*intensity"}}
+addUserKnob {7 blue_sph l "blue sph"}
+blue_sph {{"0 + (0.00018 * parent.Expressions.focal_sph)*intensity"}}
+addUserKnob {7 y_sph l "y sph" R 0 10}
+y_sph {{"0 + (0.1 * parent.Expressions.focal_sph) /50*intensity"}}
+}
+end_group

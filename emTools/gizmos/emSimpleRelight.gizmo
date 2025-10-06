@@ -1,0 +1,254 @@
+add_layer {N N.red N.green N.blue N.X N.Y N.Z}
+add_layer {albedo albedo.red albedo.green albedo.blue}
+Gizmo {
+ name emSimpleRelight
+ inputs 2
+ knobChanged "import nuke\n\nn = nuke.thisNode()\nk = nuke.thisKnob()\n\n## LIGHT PICKER\nif k.name() == 'light':\n    normal = nuke.toNode(f\"Input_N\")\n    posN = n\['light'].value()\n    animated = nuke.thisKnob().isAnimated()\n    \n    # Check if proxy mode is active\n    if nuke.root().knob('proxy').value():\n        nuke.message('You have to disable proxy mode to use this feature.')\n    else:             \n        # Sample RGB values from the static texture (posNickt)\n        r = normal.sample('red',  posN\[0], posN\[1])\n        g = normal.sample('green', posN\[0], posN\[1])\n        b = normal.sample('blue',  posN\[0], posN\[1])\n            \n        if animated:\n            if not n.knob('light_XYZ').isAnimated():\n                n.knob('light_XYZ').setAnimated()\n        else:\n            n.knob('light_XYZ').clearAnimated()\n                \n        # Set the light_XYZ knob with the sampled values\n        n\['light_XYZ'].setValue(\[r, g, b])\n\n## CUSTOM INPUTS\nif k.name('customInputs'):\n    input_alb = nuke.toNode('Inputalbedo')\n    input_N = nuke.toNode('InputN')\n    inputs = \[input_alb, input_N]\n    inputs_names = \['Inputalbedo', 'InputN']\n    switch_nodes = \['Switch_albedo', 'Switch_N']\n    \n    if n.knob('customInputs').value() == 1:\n        # INPUTS CREATION\n        for i in inputs_names:\n            checkInputs = nuke.toNode(i)\n            if not checkInputs:\n                newInput = nuke.createNode('Input', inpanel=False)  # Create Input node\n                newInput.setName(i)\n                \n                for switch in switch_nodes:\n                    switchNode = nuke.toNode(switch)\n                \n                    if switchNode:\n                        switchNode.setInput(1, newInput)\n                        newInput.setYpos(switchNode.ypos() - 50)  # Adjusting Y-position, not X-position\n                        newInput.setXpos(switchNode.xpos())\n                        \n                        # Correct albedo input\n                        input_albedo = nuke.toNode('Inputalbedo')\n                        if input_albedo:\n                            switchNode_albedo = nuke.toNode('Switch_albedo')\n                            switchNode_albedo.setInput(1, input_albedo)\n                            input_albedo.setYpos(switchNode_albedo.ypos() - 50)   \n                            input_albedo.setXpos(switchNode_albedo.xpos())\n                        \n        # MAKE THE KNOBS INVISIBLE\n        n.knobs()\['in_1'].setVisible(False)\n        n.knobs()\['in'].setVisible(False)\n                    \n                \n    else:\n        # INPUTS DESTROY\n        for j in inputs_names:\n            inputs = nuke.toNode(j)\n            if nuke.toNode(j):\n                nuke.delete(inputs)  # Delete 'InputUTILS' if it exists \n        \n        # MAKE THE KNOBS VISIBLE\n        n.knobs()\['in_1'].setVisible(True)\n        n.knobs()\['in'].setVisible(True)              \n                \n                \n                \n                \n                \n                \n                \n                \n                \n                \n                \n                \n                \n                \n                \n                \n                \n                \n                \n                \n                \n                \n                \n                \n                                  "
+ tile_color 0x6000ff
+ label "\[value falloffType]"
+ addUserKnob {20 User l emSimpleRelight}
+ addUserKnob {6 view_light l "View Light" +STARTLINE}
+ addUserKnob {12 light t "Pick the position of your light using this knob. It's 100% interactive."}
+ light {960 540}
+ addUserKnob {13 light_XYZ l "light XYZ" +INVISIBLE}
+ addUserKnob {26 gap01 l " " T " "}
+ addUserKnob {7 exposure t "Controls the exposure of your light." R 0 10}
+ exposure 1
+ addUserKnob {41 white l color t "Controls the color of your light." T Grade1.white}
+ addUserKnob {26 gap02 l " " T " "}
+ addUserKnob {4 falloffType l "falloff type" t "Falloff type of the light." M {None Lineal Cubic Quadratic Smooth Exponential "" "" "" "" "" "" "" "" "" ""}}
+ falloffType Lineal
+ addUserKnob {7 falloff t "Controls Falloff contribution." R 0 10}
+ falloff 1
+ addUserKnob {26 gap03 l " " T " "}
+ addUserKnob {26 autor l "" +STARTLINE T "<font color=\"grey\">emSimpleRelight v1.1 | emateofabregas.com | 2024 </font>"}
+ addUserKnob {20 inputs_tab l Inputs}
+ addUserKnob {6 remove_rgb l "Remove RGB" +STARTLINE}
+ addUserKnob {6 customInputs l "Custom Inputs" -STARTLINE}
+ addUserKnob {41 in_1 l N T Input_N.in}
+ addUserKnob {41 in l albedo T Input_Albedo.in}
+}
+ Input {
+  inputs 0
+  name InputImg
+  label 0
+  xpos 647
+  ypos -336
+ }
+set Nb7cc2800 [stack 0]
+ Dot {
+  name Dot3
+  xpos 998
+  ypos -327
+ }
+ Dot {
+  name Dot2
+  xpos 998
+  ypos 181
+ }
+push $Nb7cc2800
+ Switch {
+  which 1
+  name Switch_albedo
+  xpos 514
+  ypos -243
+  disable {{"!\[exists parent.input2]"}}
+ }
+ Shuffle {
+  in albedo
+  in2 rgba
+  alpha alpha2
+  name Input_Albedo
+  xpos 514
+  ypos -195
+  disable {{"\[exists parent.input2]"}}
+ }
+set Nb7cc3400 [stack 0]
+ Input {
+  inputs 0
+  name InputMask
+  label 1
+  xpos 889
+  ypos 59
+  number 1
+ }
+push $Nb7cc2800
+ Switch {
+  inputs 2
+  which 1
+  name SwitchMask
+  xpos 779
+  ypos 65
+  disable {{"!\[exists parent.input1]"}}
+ }
+push $Nb7cc2800
+ Switch {
+  which 1
+  name Switch_N
+  xpos 296
+  ypos -330
+  disable {{"!\[exists parent.input3]"}}
+ }
+ Shuffle {
+  in {N.red N.green N.blue -N.X}
+  in2 rgba
+  alpha alpha2
+  name Input_N
+  xpos 296
+  ypos -274
+  disable {{"\[exists parent.input3]"}}
+ }
+ ColorMatrix {
+  matrix {
+      {{parent.light_XYZ.x} 0 0}
+      {0 {parent.light_XYZ.y} 0}
+      {0 0 {parent.light_XYZ.z}}
+    }
+  name ColorMatrix
+  xpos 296
+  ypos -233
+ }
+ Expression {
+  channel3 rgba
+  expr3 r+g+b+a
+  name Merge_Channels
+  xpos 296
+  ypos -190
+ }
+ Expression {
+  channel3 rgba
+  expr3 a*parent.falloff*0.25
+  name Falloff
+  xpos 296
+  ypos -146
+ }
+set Nad76a800 [stack 0]
+ Expression {
+  channel3 rgba
+  expr3 pow(a,parent.exp)
+  name Exponential
+  xpos 530
+  ypos -94
+ }
+push $Nad76a800
+ Expression {
+  channel3 rgba
+  expr3 smoothstep(0,1,a)
+  name Smooth
+  xpos 433
+  ypos -94
+ }
+push $Nad76a800
+ Expression {
+  channel3 rgba
+  expr3 pow2(a),0,1
+  name Quadratic
+  xpos 338
+  ypos -96
+ }
+push $Nad76a800
+ Expression {
+  channel3 rgba
+  expr3 clamp((a**3),0,1)*parent.falloff
+  maskChannelInput -rgba.alpha
+  name Cubic
+  xpos 243
+  ypos -94
+ }
+push $Nad76a800
+ NoOp {
+  name Lineal
+  xpos 149
+  ypos -93
+ }
+push $Nad76a800
+ Expression {
+  channel3 rgba
+  expr3 a*abs(x)
+  name None
+  xpos 51
+  ypos -94
+ }
+ Switch {
+  inputs 6
+  which {{parent.falloffType}}
+  name Switch_Falloff_Type
+  xpos 297
+  ypos -41
+ }
+ Expression {
+  channel3 rgba
+  expr3 clamp(a)
+  name Clamp
+  xpos 297
+  ypos -6
+ }
+ Grade {
+  white {1 1 1 1}
+  white_panelDropped true
+  multiply {{parent.exposure}}
+  name Grade1
+  xpos 297
+  ypos 28
+ }
+ Dot {
+  name Dot1
+  xpos 330
+  ypos 68
+ }
+push $Nb7cc2800
+push $Nb7cc3400
+ Merge2 {
+  inputs 2
+  operation divide
+  name Merge2
+  xpos 647
+  ypos -195
+  disable {{parent.view_light}}
+ }
+ Remove {
+  channels rgb
+  name Remove_RGB
+  label "\[value channels]"
+  xpos 647
+  ypos -107
+  disable {{!parent.remove_rgb}}
+ }
+ Remove {
+  channels rgba
+  name View_Light
+  label "\[value channels]"
+  xpos 647
+  ypos -51
+  disable {{!parent.view_light}}
+ }
+ Merge2 {
+  inputs 2+1
+  operation plus
+  Achannels rgb
+  name Merge1
+  xpos 647
+  ypos 65
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge3
+  xpos 647
+  ypos 124
+  disable {{parent.view_light}}
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy1
+  xpos 647
+  ypos 172
+ }
+ Output {
+  name Output1
+  xpos 647
+  ypos 307
+ }
+end_group

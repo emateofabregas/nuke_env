@@ -1,0 +1,51 @@
+#! C:/Program Files/Nuke15.1v4/nuke-15.1.4.dll -nx
+version 15.1 v4
+Gizmo {
+knobChanged "import nuke\n\nk = nuke.thisKnob()\nn = nuke.thisNode()\n\ntype = n.knobs()\['type'].value()\n\nif type == 'scale':\n    n.knobs()\['format'].setVisible(False)\n    n.knobs()\['scale'].setVisible(True)\nelif type == 'to format':\n    n.knobs()\['format'].setVisible(True)\n    n.knobs()\['scale'].setVisible(False)\nelse:\n    n.knobs()\['format'].setVisible(False)\n    n.knobs()\['scale'].setVisible(False)\n    "
+addUserKnob {20 User l emSmartUpscale}
+addUserKnob {41 format l "output format" +HIDDEN T Reformat1.format}
+addUserKnob {41 scale +DISABLED +HIDDEN T Reformat1.scale}
+addUserKnob {41 scale_1 l scale T Reformat1.scale}
+addUserKnob {26 gap01 l " " T " "}
+addUserKnob {26 Autor l " " T "<font color=\"grey\">emSmartUpscale v1.0 | emateofabregas.com | 2025</font>"}
+}
+Input {
+inputs 0
+name InputImg
+xpos 173
+ypos 43
+}
+Log2Lin {
+operation lin2log
+name Log2Lin1
+xpos 173
+ypos 111
+}
+Reformat {
+type scale
+scale 2
+pbb true
+name Reformat1
+label "\[value filter]"
+xpos 173
+ypos 154
+}
+Sharpen {
+channels rgb
+size {{parent.Reformat1.scale}}
+name Sharpen1
+label "\[value size] px"
+xpos 173
+ypos 209
+}
+Log2Lin {
+name Log2Lin2
+xpos 173
+ypos 264
+}
+Output {
+name Output1
+xpos 173
+ypos 336
+}
+end_group

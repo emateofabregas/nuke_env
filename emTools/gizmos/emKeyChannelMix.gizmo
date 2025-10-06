@@ -1,0 +1,121 @@
+add_layer {albedo albedo.red albedo.green albedo.blue}
+Gizmo {
+name emKeyChannelMix
+inputs 2
+tile_color 0x993a59ff
+label "\[value in]"
+note_font Verdana
+addUserKnob {20 User l emKeyChannelMix}
+addUserKnob {41 in l channel t "Set up AOV channel that you have to changed." T Input_Channel.in}
+addUserKnob {6 viewChannel l "view channel" -STARTLINE}
+addUserKnob {41 mix T Keymix.mix}
+addUserKnob {41 bbox l "Set BBox to" T Keymix.bbox}
+addUserKnob {26 ""}
+addUserKnob {41 saturation T Saturation1.saturation}
+addUserKnob {41 mode l "luminance math sat" T Saturation1.mode}
+addUserKnob {41 blackpoint T Grade1.blackpoint}
+addUserKnob {41 whitepoint T Grade1.whitepoint}
+addUserKnob {41 black l lift T Grade1.black}
+addUserKnob {41 white l gain T Grade1.white}
+addUserKnob {41 multiply T Grade1.multiply}
+addUserKnob {41 add l offset T Grade1.add}
+addUserKnob {41 gamma T Grade1.gamma}
+addUserKnob {41 reverse T Grade1.reverse}
+addUserKnob {41 black_clamp l "black clamp" -STARTLINE T Grade1.black_clamp}
+addUserKnob {41 white_clamp l "white clamp" -STARTLINE T Grade1.white_clamp}
+addUserKnob {26 "" l mask T ""}
+addUserKnob {41 maskChannelInput l "" -STARTLINE T Grade1.maskChannelInput}
+addUserKnob {41 inject -STARTLINE T Grade1.inject}
+addUserKnob {41 invert_mask l invert -STARTLINE T Grade1.invert_mask}
+addUserKnob {41 fringe -STARTLINE T Grade1.fringe}
+addUserKnob {26 ""}
+addUserKnob {41 mix_1 l mix T Grade1.mix}
+addUserKnob {26 gap_01 l "" +STARTLINE T " "}
+addUserKnob {26 Autor l "" +STARTLINE T "<font color=\"grey\"> emKeyChannelMix v.5.1 | emateofabregas.com - 2024"}
+}
+Input {
+inputs 0
+name InputImg
+xpos -678
+ypos 93
+}
+Dot {
+name Dot1
+xpos -644
+ypos 138
+}
+set Nbb60d400 [stack 0]
+Input {
+inputs 0
+name Mask
+xpos -781
+ypos 96
+number 1
+}
+Switch {
+inputs 2
+which {{"!\[exists parent.input1]\n"}}
+name Switch_mask
+xpos -781
+ypos 184
+}
+set Nbac6de00 [stack 0]
+push $Nbb60d400
+Shuffle {
+in albedo
+alpha black
+name Input_Channel
+xpos -902
+ypos 133
+}
+Saturation {
+maskChannelMask {{{parent.Grade1.maskChannelMask}}}
+unpremult {{{parent.Grade1.unpremult}}}
+name Saturation1
+xpos -902
+ypos 187
+disable {{"saturation == 1"}}
+}
+Grade {
+inputs 1+1
+white_panelDropped true
+name Grade1
+xpos -902
+ypos 246
+}
+Dot {
+name Dot4
+xpos -868
+ypos 289
+}
+set Nbacd9400 [stack 0]
+Dot {
+name Dot8
+xpos -868
+ypos 337
+}
+push $Nbac6de00
+push $Nbacd9400
+push $Nbb60d400
+Keymix {
+inputs 3
+channels rgb
+invertMask {{parent.Grade1.invert_mask}}
+mix 0.5
+name Keymix
+xpos -678
+ypos 286
+}
+Switch {
+inputs 2
+which {{parent.viewChannel}}
+name view_AOV
+xpos -678
+ypos 334
+}
+Output {
+name Output1
+xpos -678
+ypos 380
+}
+end_group

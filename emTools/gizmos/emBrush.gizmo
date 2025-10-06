@@ -1,0 +1,241 @@
+Group {
+ name emBrush1
+ inputs 2
+ tile_color 0xbc6e14ff
+ addUserKnob {20 User l emBrush}
+ addUserKnob {4 viewMode l "view mode" t "Change the view depending what you want to check. " M {"Final Output" "Mask Effect" "Brush Effect" "Brush + Mask Applied" "" ""}}
+ addUserKnob {26 ""}
+ addUserKnob {26 text0 l "@b;Alpha" T " "}
+ addUserKnob {6 usingLuminance l "Using image luminance as a mask" t "Following luminance instead of Kuwahara Filter. It looks more integrated with the render." -STARTLINE}
+ usingLuminance true
+ addUserKnob {41 range T Keyer11.range}
+ addUserKnob {26 ""}
+ addUserKnob {41 operation T Merge42.operation}
+ addUserKnob {41 bbox l "set bbox to " -STARTLINE T Merge42.bbox}
+ addUserKnob {26 ""}
+ addUserKnob {20 group1 l "@b;Kuwahara Filter" n 1}
+ group1 0
+ addUserKnob {41 AnisotropicKuwaharaFilter_Radius l Radius T BlinkScript2.AnisotropicKuwaharaFilter_Radius}
+ addUserKnob {41 AnisotropicKuwaharaFilter_Q l Q T BlinkScript2.AnisotropicKuwaharaFilter_Q}
+ addUserKnob {41 AnisotropicKuwaharaFilter_alpha l alpha T BlinkScript2.AnisotropicKuwaharaFilter_alpha}
+ addUserKnob {41 AnisotropicKuwaharaFilter_scale l scale T BlinkScript2.AnisotropicKuwaharaFilter_scale}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {19 exposure t "Following f-Stops. Power by 2. " R -5 5}
+ exposure 0
+ addUserKnob {6 exposure_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 color_rgba_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {7 saturation R 0 4}
+ saturation 1
+ addUserKnob {6 saturation_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
+ addUserKnob {6 color_rgba_1_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {19 blackpoint t "This color is turned into black." R -1 1}
+ blackpoint 0
+ addUserKnob {6 blackpoint_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {19 whitepoint t "This color is turned into white." R 0 4}
+ whitepoint 1
+ addUserKnob {6 whitepoint_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {19 black l lift t "Black is turned into this color." R -1 1}
+ black 0
+ addUserKnob {6 black_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {19 white l gain t "White is turned into this color." R 0 4}
+ white 1
+ addUserKnob {6 white_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {19 multiply t "Constant to multiply result by." R 0 4}
+ multiply 1
+ addUserKnob {6 multiply_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {19 add l offset t "Constant to add to result (raises both black & white, unlike lift)" R -1 1}
+ add 0
+ addUserKnob {6 add_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {19 gamma t "Gamma correction applied to final result." R 0 4}
+ gamma 1
+ addUserKnob {6 gamma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 black_clamp l "black clamp" t "Output that is less than zero is changed to zero." +STARTLINE}
+ black_clamp true
+ addUserKnob {6 white_clamp l "white clamp" t "Output that is greater than 1 is changed to 1." -STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {26 "" l mask T ""}
+ addUserKnob {41 maskChannelMask l "" -STARTLINE T Merge42.maskChannelMask}
+ addUserKnob {41 inject -STARTLINE T Merge42.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge42.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge42.fringe}
+ addUserKnob {41 mix T Merge42.mix}
+ addUserKnob {26 ""}
+ addUserKnob {26 autor l "" +STARTLINE T "<font color=\"grey\">emBrush v1.1 | emateofabregas.com | 2025 </font>"}
+}
+ Input {
+  inputs 0
+  name InputMask
+  label 2
+  xpos 1201
+  ypos 425
+  number 1
+ }
+ Input {
+  inputs 0
+  name InputImg
+  label 1
+  xpos 826
+  ypos 119
+ }
+ Constant {
+  inputs 0
+  color {0 0 0 1}
+  name Constant1
+  xpos 699
+  ypos 167
+ }
+ Switch {
+  inputs 2
+  which 1
+  name Switch3
+  label "avoid Blinkscript Error"
+  xpos 826
+  ypos 185
+  disable {{"!\[exists parent.input0]"}}
+ }
+ Dot {
+  name Dot79
+  xpos 860
+  ypos 260
+ }
+set N31da000 [stack 0]
+ Dot {
+  name Dot80
+  xpos 1091
+  ypos 260
+ }
+ Keyer {
+  operation "luminance key"
+  range {0.03551046691 0.4878917199 1 1}
+  name Keyer11
+  xpos 1057
+  ypos 319
+ }
+push $N31da000
+ BlinkScript {
+  kernelSourceFile D:/Sink/_external_tools/kuwahara-filter-nuke-main/kuwahara_filter_buffer_D.blink
+  recompileCount 3
+  ProgramGroup 1
+  KernelDescription "3 \"AnisotropicKuwaharaFilter\" iterate pixelWise 5af1b3a3be570d8831309cefd448915d8011c79d2df4bdb69eae2e0f011d754e 2 \"src\" Read Random \"dst\" Write Point 4 \"Radius\" Int 1 DwAAAA== \"Q\" Float 1 AABAQQ== \"alpha\" Float 1 AACgQA== \"scale\" Float 1 AACAPw== 4 \"radius\" 1 1 Default \"q\" 1 1 Default \"alpha\" 1 1 Default \"scale\" 1 1 Default 2 \"width\" Float 1 1 AAAAAA== \"height\" Float 1 1 AAAAAA=="
+  kernelSource "kernel AnisotropicKuwaharaFilter : ImageComputationKernel<ePixelWise>\n\{\n    Image<eRead, eAccessRandom, eEdgeClamped> src; // Input image\n    Image<eWrite> dst; // Output image\n\n    param:\n        int radius; // Radius of the filter\n        float q;\n        float alpha;\n        float scale;\n\n    local:\n        float width;\n        float height;\n\n    void define() \{\n        defineParam(radius, \"Radius\", 15); \n        defineParam(q, \"Q\", 12.0f); \n        defineParam(alpha, \"alpha\", 5.0f); \n        defineParam(scale, \"scale\", 1.0f); \n    \}\n\n    void init() \{\n        width = src.bounds.x2;\n        height = src.bounds.y2;\n    \}\n\n    void process(int2 pos) \{\n        SampleType(src) input = src(pos.x, pos.y);\n        float2 uv = float2(pos.x / float(width), pos.y / float(height));\n\n        float4 m\[4];\n        float4 s\[4];\n        \n        for (int k = 0; k < 4; ++k) \{\n            m\[k] = float4(0.0f, 0.0f, 0.0f, 0.0f);\n            s\[k] = float4(0.0f, 0.0f, 0.0f, 0.0f);\n        \}\n        float piN = 2.0f * PI / 4.0f;\n        \n        \n        float tw = 1.0f; // place texture reading here Alpha channel\n        float a = radius * clamp((alpha + tw) / alpha, 0.1, 2.0); \n        float b = radius * clamp(alpha / (alpha + tw), 0.1, 2.0);\n\n        float tz = 0.0f;\n        float cos_phi = cos(tz); // 1\n        float sin_phi = sin(tz); // 0\n\n        float4 SR = float4(cos_phi/a, -sin_phi/b, \n                            sin_phi/a, cos_phi/b); \n\n        int max_x = int(sqrt(a*a * cos_phi*cos_phi +\n                            b*b * sin_phi*sin_phi));\n        int max_y = int(sqrt(a*a * sin_phi*sin_phi +\n                            b*b * cos_phi*cos_phi));\n        float real_scale = clamp(pow(scale,2), 0.05, 1.0); // TEST\n        for (int j = 0; j <= max_y; ++j) \{\n            for (int i = -max_x; i <= max_x; ++i) \{\n                if ((j != 0) || (i > 0)) \{\n                    // float2 v = float2(float(i), float(j));\n                    float2 v = float2(\n                        SR\[0]*float(i) + SR\[1]*float(j),\n                        SR\[2]*float(i) + SR\[3]*float(j));\n                    float dot_v = dot(v, v);\n                    if (dot_v <= real_scale) \{\n                        int2 coord0 = int2(uv.x * width + i, uv.y * height + j);\n                        int2 coord1 = int2(uv.x * width - i, uv.y * height - j);\n\n                        float4 c0_fix = src(coord0.x, coord0.y);\n                        float3 c0 = float3(c0_fix.x, c0_fix.y, c0_fix.z);\n                        float4 c1_fix = src(coord1.x, coord1.y);\n                        float3 c1 = float3(c1_fix.x, c1_fix.y, c1_fix.z);\n\n                        float3 cc0 = c0 * c0;\n                        float3 cc1 = c1 * c1;\n\n                        float n = 0.0f;\n                        float wx\[4];\n                        \n                        float z;\n                        float xx = 0.33f - 0.84f * v.x * v.x;\n                        float yy = 0.33f - 0.84f * v.y * v.y;\n\n                        z = max(0.0f, v.y + xx);\n                        n += wx\[0] = z * z;\n\n                        z = max(0.0f, -v.x + yy);\n                        n += wx\[1] = z * z;\n\n                        z = max(0.0f, -v.y + xx);\n                        n += wx\[2] = z * z;\n\n                        z = max(0.0f, v.x + yy);\n                        n += wx\[3] = z * z;\n                        \n\n                        float g = exp(-3.125f * dot_v) / n;\n                        for (int k = 0; k < 4; ++k) \{\n                            float w = wx\[k] * g;\n                            m\[k] += float4(c0.x * w, c0.y * w, c0.z * w, w);\n                            // Extend cc0 and cc1 to float4 by adding a default fourth component, here I use 0.0f\n                            s\[k] += float4(cc0.x * w, cc0.y * w, cc0.z * w, 0.0f);\n                            m\[(k + 2) & 3] += float4(c1.x * w, c1.y * w, c1.z * w, w);\n                            s\[(k + 2) & 3] += float4(cc1.x * w, cc1.y * w, cc1.z * w, 0.0f);\n                        \}\n                    \}\n                \}\n            \}\n        \}\n        \n        float4 o = float4(0.0f, 0.0f, 0.0f, 0.0f);\n        for (int k = 0; k < 4; ++k) \{\n            m\[k].x /= m\[k].w;\n            m\[k].y /= m\[k].w;\n            m\[k].z /= m\[k].w;\n\n            float4 temp = s\[k] / m\[k].w - float4(m\[k].x * m\[k].x, m\[k].y * m\[k].y, m\[k].z * m\[k].z, 0.0f);\n            s\[k] = float4(fabs(temp.x), fabs(temp.y), fabs(temp.z), fabs(temp.w));\n            \n            float sigma2 = sqrt(s\[k].x) + sqrt(s\[k].y) + sqrt(s\[k].z);\n            float w =1.0f / (1.0f + pow(255.0f * sigma2, q)); \n\n            // Accumulate the result in o\n            o += float4(m\[k].x * w, m\[k].y * w, m\[k].z * w, w);\n        \}\n\n        dst() = float4(o.x / o.w, o.y / o.w, o.z / o.w, 1.0f);\n        // dst() = input;\n    \}\n\n\};\n"
+  rebuild ""
+  rebuild_finalise ""
+  name BlinkScript2
+  xpos 826
+  ypos 318
+ }
+set N3a378f00 [stack 0]
+ Keyer {
+  operation "luminance key"
+  range {{parent.Keyer11.range} {parent.Keyer11.range} {parent.Keyer11.range} {parent.Keyer11.range}}
+  name Keyer1
+  xpos 943
+  ypos 318
+ }
+ Switch {
+  inputs 2
+  which {{parent.usingLuminance}}
+  name Switch2
+  xpos 1057
+  ypos 380
+ }
+ ChannelMerge {
+  inputs 2
+  operation multiply
+  name ChannelMerge1
+  xpos 1057
+  ypos 419
+  disable {{"!\[exists parent.input2]"}}
+ }
+ Dot {
+  name Dot81
+  xpos 1091
+  ypos 494
+ }
+set N31db000 [stack 0]
+ Shuffle {
+  in alpha
+  name Shuffle2
+  label "\[value in]"
+  xpos 1057
+  ypos 572
+ }
+set N3a37ad00 [stack 0]
+push $N3a378f00
+ BlinkScript {
+  recompileCount 59
+  ProgramGroup 1
+  KernelDescription "3 \"Grading\" iterate pixelWise 96c285f0ad14067e2637fab6954bbfd1b1ed5c4d558478255e107ebaa957a62b 2 \"src\" Read Point \"dst\" Write Point 11 \"exposure\" Float 4 AAAAAAAAAAAAAAAAAAAAAA== \"saturation\" Float 1 AACAPw== \"blackpoint\" Float 4 AAAAAAAAAAAAAAAAAAAAAA== \"whitepoint\" Float 4 AACAPwAAgD8AAIA/AACAPw== \"lift\" Float 4 AAAAAAAAAAAAAAAAAAAAAA== \"gain\" Float 4 AACAPwAAgD8AAIA/AACAPw== \"multiply\" Float 4 AACAPwAAgD8AAIA/AACAPw== \"offset\" Float 4 AAAAAAAAAAAAAAAAAAAAAA== \"gamma\" Float 4 AACAPwAAgD8AAIA/AACAPw== \"whiteclamp\" Bool 1 AA== \"blackclamp\" Bool 1 AQ== 11 \"exposure\" 4 1 Default \"saturation\" 1 1 Default \"blackpoint\" 4 1 Default \"whitepoint\" 4 1 Default \"lift\" 4 1 Default \"gain\" 4 1 Default \"multiply\" 4 1 Default \"offset\" 4 1 Default \"gamma\" 4 1 Default \"whiteclamp\" 1 1 Default \"blackclamp\" 1 1 Default 1 \"coeff\" Float 3 1 AAAAAAAAAAAAAAAAAAAAAA=="
+  kernelSource "// Blinkscript - Grade + Saturation + Exposure\n\nkernel Grading : ImageComputationKernel<ePixelWise>\n\{\n    Image<eRead, eAccessPoint, eEdgeClamped> src;\n    Image<eWrite>                           dst;\n\n    param:\n        float4  exposure;\n        float  saturation;\n        float4 blackpoint;\n        float4 whitepoint;\n        float4 lift;\n        float4 gain;\n        float4 multiply;\n        float4 offset;\n        float4 gamma;\n        bool   whiteclamp;\n        bool   blackclamp;\n\n    local:\n        float3 coeff; // Rec. 709 coefficient\n\n    void define()\n    \{\n        defineParam(exposure,   \"exposure\",   float4(0.0f));\n        defineParam(saturation, \"saturation\", float(1.0f));\n        defineParam(blackpoint, \"blackpoint\", float4(0.0f));\n        defineParam(whitepoint, \"whitepoint\", float4(1.0f));\n        defineParam(lift,       \"lift\",       float4(0.0f));\n        defineParam(gain,       \"gain\",       float4(1.0f));\n        defineParam(multiply,   \"multiply\",   float4(1.0f));\n        defineParam(offset,     \"offset\",     float4(0.0f));\n        defineParam(gamma,      \"gamma\",      float4(1.0f));\n        defineParam(whiteclamp, \"whiteclamp\", bool(false));\n        defineParam(blackclamp, \"blackclamp\", bool(true));\n    \}\n\n    void init()\n    \{\n        // Rec 709 Coefficient by channel.\n        coeff.x = 0.2126f;\n        coeff.y = 0.7152f;\n        coeff.z = 0.0722f;\n    \}\n\n    void process()\n    \{\n        // 1. Read the source (RGBA)\n        SampleType(src) srcPix = src();\n\n        // 2. Splitting RGB and Alpha\n        float3 rgb   = float3(srcPix.x, srcPix.y, srcPix.z);\n        float  alpha = srcPix.w;\n\n        // 3. Compute the luma of RGB.\n        float  luma = dot(rgb, coeff);\n        float3 gray = float3(luma, luma, luma);               // splat scalar to float3\n\n        // 4. Apply saturation (manual lerp function)\n        float3 satRGB = gray + (rgb - gray) * saturation;\n\n        // 5. Reassemble RGBA\n        float4 pixel = float4(satRGB, alpha);\n\n        // 6. Grading\n        // Prevent division between whitepoint and blackpoint\n        float4 safeDenom = max(whitepoint - blackpoint, float4(1e-5f));\n\n        float4 A = multiply * (gain - lift) / safeDenom;\n        float4 B = offset + lift - A * blackpoint;\n\n        // Apply grade curve\n        float4 output = pow(A * pixel + B, 1.0f / gamma);\n\n        // Apply exposure (fStops)\n        output *= pow(float4(2.0f), exposure);\n\n\n        // 7. Apply clamping\n        if (whiteclamp) output = min(float4(1.0f), output);\n        if (blackclamp) output = max(float4(0.0f), output);\n\n        // 8. Apply result\n        dst() = output;\n    \}\n\};\n"
+  rebuild ""
+  Grading_exposure {{parent.exposure} {parent.exposure} {parent.exposure} {parent.exposure}}
+  Grading_saturation {{parent.saturation}}
+  Grading_blackpoint {{parent.blackpoint} {parent.blackpoint} {parent.blackpoint} {parent.blackpoint}}
+  Grading_whitepoint {{parent.whitepoint} {parent.whitepoint} {parent.whitepoint} {parent.whitepoint}}
+  Grading_lift {{parent.black} {parent.black} {parent.black} {parent.black}}
+  Grading_gain {{parent.white} {parent.white} {parent.white} {parent.white}}
+  Grading_multiply {{parent.multiply} {parent.multiply} {parent.multiply} {parent.multiply}}
+  Grading_offset {{parent.add} {parent.add} {parent.add} {parent.add}}
+  Grading_gamma {{parent.gamma} {parent.gamma} {parent.gamma} {parent.gamma}}
+  Grading_whiteclamp {{parent.white_clamp}}
+  Grading_blackclamp {{parent.black_clamp}}
+  rebuild_finalise ""
+  name BlinkScript1
+  xpos 826
+  ypos 401
+ }
+set N31d6800 [stack 0]
+ Dot {
+  name Dot3
+  xpos 729
+  ypos 410
+ }
+set N31da800 [stack 0]
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy1
+  xpos 695
+  ypos 572
+ }
+push $N31da800
+push $N3a37ad00
+push $N31db000
+push $N31d6800
+push $N31da000
+ Dot {
+  name Dot2
+  xpos 622
+  ypos 260
+ }
+ Dot {
+  name Dot1
+  xpos 622
+  ypos 494
+ }
+ Merge2 {
+  inputs 2+1
+  operation max
+  name Merge42
+  label "<b>mix:\[value mix]"
+  xpos 826
+  ypos 480
+ }
+ Switch {
+  inputs 4
+  which {{parent.viewMode}}
+  name Switch1
+  label "\[value which]"
+  xpos 826
+  ypos 628
+ }
+ Output {
+  name Output1
+  xpos 826
+  ypos 691
+ }
+end_group
