@@ -3,18 +3,25 @@ import nuke
 def reload_nodes():
     for read in nuke.allNodes('Read'):
         read['reload'].execute()
-        print(f"Successful update {r.name()}")
+        print(f"Successful update {read.name()}")
 
 
-def unicorn_read():
-    read = nuke.createNode('Read', inpanel=False)
-    read.setName('Check_Renders')
-    read['file'].setValue('[value Write1.file]')
-    read['first'].setExpression('first_frame')
-    read['last'].setExpression('last_frame')
-    read['tile_color'].setValue(hex_color_to_rgb(0,1,0)) #Modify color of the node here.
+def read_write():
+    write = nuke.selectedNodes('Write')
 
-    nuke.message("Successful created 'Check_Renders' node!")
+    if not write:
+        nuke.message('No Write node selected. Please, try again selecting a Write Node.')
+        return
+
+    for w in write:
+        write_name = w['name'].value()
+        read = nuke.createNode('Read', inpanel=False)
+        read.setName('Check_Renders')
+        tcl_exp = "[value " + write_name + ".file]"
+        read['file'].setValue(tcl_exp)
+        read['first'].setExpression('first_frame')
+        read['last'].setExpression('last_frame')
+        read['tile_color'].setValue(0x7fff)
 
 
 def extraCleanCache():
@@ -28,6 +35,15 @@ def extraCleanCache():
     reload_nodes()
 
 
+def gui():  
+    for n in nuke.selectedNodes():
+        if n["disable"].hasExpression():
+            n["disable"].clearAnimated()
+            n["disable"].setValue(False)
+        else:
+            n["disable"].setExpression("$gui")
+
+
 ### Nuke Menu
 utils_MenusLoaded = False
  
@@ -39,8 +55,9 @@ def menu_utils():
         cm = mm.addMenu("emTools")
         sm = cm.addMenu("Utils")
         sm.addCommand("Reload Reads", "em_utils.reload_nodes()", "Shirt+R")
-        sm.addCommand("Read to check Renders", "em_utils.unicorn_read()", "Shift+W")
+        sm.addCommand("Read to check Renders", "em_utils.read_write()", "Shift+W")
         sm.addCommand("Extra Clean Cache", "em_utils.extraCleanCache()", "")
+        sm.addCommand("Set and remove $gui", "em_utils.gui()", "Shift+D", )
 
 
 menu_utils()

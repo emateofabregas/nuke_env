@@ -3,6 +3,8 @@ import nuke
 def set_ocio():
     if nuke.root()['colorManagement'].value() == 'Nuke':
         nuke.root()['colorManagement'].setValue('OCIO')
+        nuke.root()['OCIO_config'].setValue('aces_1.2')
+        nuke.root()["reloadConfig"].execute()
 
 def modify_ocio():
     ocio = nuke.usingOcio()
