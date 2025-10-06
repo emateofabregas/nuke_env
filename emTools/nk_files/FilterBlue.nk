@@ -1,0 +1,65 @@
+set cut_paste_input [stack 0]
+version 15.1 v5
+push $cut_paste_input
+Dot {
+ name Dot4
+ selected true
+ xpos 756
+ ypos 692
+}
+set N11855550 [stack 0]
+Dot {
+ name Dot7
+ selected true
+ xpos 883
+ ypos 692
+}
+Dot {
+ name Dot6
+ selected true
+ xpos 883
+ ypos 893
+}
+push $N11855550
+Dot {
+ name Dot5
+ selected true
+ xpos 541
+ ypos 692
+}
+Keyer {
+ operation "luminance key"
+ range {0.05113507235 0.502032777 1 1}
+ name Keyer2
+ selected true
+ xpos 507
+ ypos 739
+}
+Blur {
+ channels rgba
+ size 46
+ name Blur2
+ label "\[value size] px"
+ selected true
+ xpos 507
+ ypos 804
+}
+push $N11855550
+FilterErode {
+ inputs 1+1
+ channels {-rgba.red -rgba.green rgba.blue none}
+ size -1000
+ mix 0.004
+ name FilterErode1
+ label "\[value size] px"
+ selected true
+ xpos 722
+ ypos 804
+}
+CopyBBox {
+ inputs 2
+ name CopyBBox1
+ selected true
+ xpos 722
+ ypos 889
+}

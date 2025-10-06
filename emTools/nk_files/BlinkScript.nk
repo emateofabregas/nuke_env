@@ -1,0 +1,15 @@
+set cut_paste_input [stack 0]
+version 15.2 v3
+push $cut_paste_input
+BlinkScript {
+ recompileCount 1
+ ProgramGroup 1
+ KernelDescription "3 \"SimpleKernel\" iterate pixelWise d398ff678327525afdbf2372246fa5d19fd42768ed5a6283045b003634a3966d 2 \"src\" Read Point \"dst\" Write Point 0 0 0"
+ kernelSource "kernel SimpleKernel : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint> src;\n  Image<eWrite> dst;\n  \n  param:\n  \n  local: \n  \n  void define() \{\n  \}\n  \n  void init() \{\n  \}\n  \n  void process() \{\n    dst() = src();\n  \}\n\};"
+ rebuild ""
+ rebuild_finalise ""
+ name BlinkScript1
+ selected true
+ xpos -64
+ ypos -142
+}

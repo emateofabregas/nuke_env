@@ -1,0 +1,13 @@
+set cut_paste_input [stack 0]
+version 15.1 v5
+push $cut_paste_input
+EdgeExtend {
+ channels depth
+ matte "Matte Alpha"
+ detailAmount 0
+ premultiply false
+ name EdgeExtend1
+ selected true
+ xpos -388
+ ypos -828
+}

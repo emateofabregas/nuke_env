@@ -1,0 +1,14 @@
+set cut_paste_input [stack 0]
+version 15.2 v3
+push $cut_paste_input
+push 0
+Merge2 {
+ inputs 2
+ operation from
+ bbox B
+ name Merge1
+ label "<b>mix: \[value mix]"
+ selected true
+ xpos -25
+ ypos -135
+}

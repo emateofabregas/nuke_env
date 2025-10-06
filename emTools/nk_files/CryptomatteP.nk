@@ -1,0 +1,34 @@
+set cut_paste_input [stack 0]
+version 15.1 v5
+push $cut_paste_input
+Cryptomatte {
+ pickerAdd {0.2319387496 0.103877075 0.1416987628 0 1040 671 1041 672}
+ pickerRemove {1.12733829 1.037412643 0.1496505737 1 1223 270 1224 271}
+ lastSelectedCryptoLayerName CryptoPrimitives
+ name CryptoPlus
+ label <b>
+ selected true
+ xpos -80
+ ypos -266
+ addUserKnob {20 User l "Smart Selection"}
+ addUserKnob {6 color_rgb_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
+ addUserKnob {26 text_01 l "@b; Smart Selection" T " "}
+ addUserKnob {22 execute_button l Execute t "It fixs the label on Cryptomatte stuff" -STARTLINE T "import nuke\n\nn = nuke.thisNode()\nk = nuke.thisKnob()\n\ndef matteListChanged():\n    matteList = n\['matteList'].getValue()\n    paths = \[]\n\n    if matteList:\n        current_paths = matteList.split('\\n')\n        print(f\"Current paths are: \{current_paths\}\")\n\n        for c in current_paths:\n            print(f\"Processing path: \{c\}\")\n            splitted = c.rsplit('/')\n\n            if len(splitted) > 3:\n                root, group, asset = splitted\[1], splitted\[2], splitted\[3]\n                path = f'/\{root\}/\{group\}/\{asset\}/*' if asset else f'/\{root\}/\{group\}/*'\n            else:\n                root, group = splitted\[1], splitted\[2].split('.')\[0]\n                path = f'/*/\{group\}*'\n\n            paths.append(path)\n\n    return '\\n'.join(paths)\n\npaths = matteListChanged()\nprint(f\"Updated paths: \{paths\}\")\nn\['matteList'].setValue(paths)"}
+ addUserKnob {22 clear_selection l Clear t "Clears all expressions in the Matte List." -STARTLINE T "import nuke\n\nn = nuke.thisNode()\n\nn\['clear'].execute()"}
+}
+Remove {
+ operation keep
+ channels rgba
+ name Remove1
+ selected true
+ xpos -80
+ ypos -220
+}
+Reformat {
+ pbb true
+ name Reformat1
+ label "<b>\[value filter]"
+ selected true
+ xpos -80
+ ypos -179
+}

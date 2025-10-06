@@ -1,0 +1,12 @@
+set cut_paste_input [stack 0]
+version 15.1 v5
+push $cut_paste_input
+push 0
+ChannelMerge {
+ inputs 2
+ operation plus
+ name ChannelMerge1
+ selected true
+ xpos -40
+ ypos -301
+}

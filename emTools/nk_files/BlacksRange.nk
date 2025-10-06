@@ -1,0 +1,17 @@
+set cut_paste_input [stack 0]
+version 15.1 v5
+push $cut_paste_input
+Expression {
+ expr0 "r <= n ? 0.1 : r"
+ expr1 "g <= n ? 0.1 : g"
+ expr2 "b <= n ? 0.1 : b"
+ unpremult -rgba.alpha
+ name BlacksRange
+ label "<b>blacks: \[value n]"
+ selected true
+ xpos -81
+ ypos -298
+ addUserKnob {20 User}
+ addUserKnob {7 n}
+ n 0.095
+}
