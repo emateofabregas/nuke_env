@@ -57,7 +57,7 @@ def menu_utils():
         sm.addCommand("Reload Reads", "em_utils.reload_nodes()", "Shirt+R")
         sm.addCommand("Read to check Renders", "em_utils.read_write()", "Shift+W")
         sm.addCommand("Extra Clean Cache", "em_utils.extraCleanCache()", "")
-        sm.addCommand("Set and remove $gui", "em_utils.gui()", "Shift+D", )
+        sm.addCommand("Set and remove $gui", "em_utils.gui()", "", )
 
 
 menu_utils()
