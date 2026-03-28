@@ -1,53 +1,40 @@
 import os
 import nuke
 import nukescripts
+import importlib
 
 ## Add PluginPaths to tools and icons
 nuke.pluginAddPath('./icons')
 nuke.pluginAddPath('./gizmos')
 nuke.pluginAddPath('./nk_files')
 nuke.pluginAddPath('./python')
+nuke.pluginAddPath('./template16')
 
 
 ## Nuke Menu for Python Scripts
-# Python Scripts
-try:
-    import em_alignnodes
-except:
-    print("Not imported Align Nodes shortcut")
-    pass
+# Import Python Scripts
+python = ["em_ocioSetUp", "em_startUpNodes", "em_utils"]
 
-try:
-    import em_ocioSetUp
-except:
-    print("Not imported Knob Default nodes")
-    pass
-
-try:
-    import em_startUpNodes
-except:
-    print("Not imported Knob Default nodes")
-    pass
-
-try:
-    import em_utils
-except:
-    print("Not  imported Utilities")
-    pass
+for py in python:
+    try:
+        importlib.import_module(py)
+        pass
+    except Exception as e:
+        raise e        
 
 
 ## Create emTools Menu and submenus
 toolbar = nuke.menu("Nodes")
 menu = toolbar.addMenu("emTools", "emTools.png")
-g = menu.addMenu("Gizmos")
-t = menu.addMenu("Toolsets")
+g = menu.addMenu("emGizmos")
+t = menu.addMenu("emToolsets")
 
 curDir = os.path.dirname(os.path.abspath(__file__))
 curDir = curDir.replace('\\', '/')
 print(curDir)
 
 # Custom gizmo creation with their menu
-gizmos = ['emArtisticLens', 'emBokehPlus', 'emBrush', 'emChromatic', 'emDepthFix', 'emEdgeSatCorrect', 'emFog' , 'emGlow', 'emKeyChannelMix', 'emLightWrap','emMatte', 'emSimpleRelight', 'emSmartUpscale', 'emUnpremultAlpha', 'emVignette'] # List of Gizmos , add a new gizmo between '' and placed in 'gizmo' folder too.
+gizmos = ['emArtisticLens', 'emBokehPlus', 'emBrush', 'emChromatic', 'emDepthFix', 'emDepthFog', 'emEdgeSatCorrect','emGlow', 'emKeyChannelMix', 'emLightWrap','emMatte', 'emSimpleRelight', 'emSmartUpscale', 'emUnpremultAlpha', 'emVignette'] # List of Gizmos , add a new gizmo between '' and placed in 'gizmo' folder too.
 for gizmo in gizmos :
     g.addCommand(gizmo, "nuke.createNode(\""+gizmo+"\")")
 
