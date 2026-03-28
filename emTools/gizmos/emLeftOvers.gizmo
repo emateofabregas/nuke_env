@@ -1,0 +1,79 @@
+Group {
+ name emLeftOvers1
+ inputs 2
+ knobChanged "import nuke\n\nk = nuke.thisKnob()\nn = nuke.thisNode()\n\nexpr = nuke.toNode('LeftOvers')\nchannels = expr.channels()\nlgt = n\['lgt_prefix'].value()\nemission = n\['emission_prefix'].value()\n\nlgt_list = \[]\nred = \[]\ngreen = \[]\nblue = \[]\n\ndef new_string(string):\n    if string:\n        stringA = string.replace(',', ' + ')\n        stringB = stringA.replace('\[', '(')\n        stringC = stringB.replace(']', ')')\n        stringD = stringC.replace(\"'\", \"\")\n        return stringD\n    else:\n        return None\n\nif lgt:\n    for c in channels:\n        if c.startswith(lgt):\n            lgt_list.append(c)\n        elif c.startswith(emission):\n            lgt_list.append(c)\n    for lgt in lgt_list:        \n        if 'red' in lgt:\n            red.append(lgt)\n        elif 'green' in lgt:\n            green.append(lgt)\n        elif 'blue' in lgt:\n             blue.append(lgt)\n            \n    if lgt_list:\n        str_red = new_string(str(red))       \n        expr\['expr0'].setValue('red - ' + str_red)\n            \n        str_green = new_string(str(green))  \n        expr\['expr1'].setValue('green - ' + str_green)\n            \n        str_blue = new_string(str(blue))\n        expr\['expr2'].setValue('blue - ' + str_blue)\n            \nelse:\n    nuke.message('Please add a prefix in the string knob!')        "
+ addUserKnob {20 User l emLeftOvers}
+ addUserKnob {6 view_leftovers l "View Left Overs" t "Isolate LeftOvers to check them." +STARTLINE}
+ addUserKnob {1 lgt_prefix l "lgt prefix" t "Please put your lighting prefix here. For example: 'C_l_', 'RGBA_'."}
+ lgt_prefix C_l_
+ addUserKnob {1 emission_prefix l "emission prefix" t "Please put your emission prefix there. For example: 'C_emission', 'Emission', 'emission'."}
+ emission_prefix C_emission
+ addUserKnob {26 gap01 l " " T " "}
+ addUserKnob {26 autor l "" +STARTLINE T "<font color=\"grey\">emLeftOvers v1.1 | emateofabregas | 2024-2025</font>"}
+}
+ Input {
+  inputs 0
+  name InputRawRender
+  xpos 168
+  ypos -25
+  number 1
+ }
+add_layer {leftOvers leftOvers.red leftOvers.green leftOvers.blue leftOvers.alpha}
+add_layer {RGBA_default RGBA_default.red RGBA_default.green RGBA_default.blue RGBA_default.alpha}
+ Expression {
+  channel0 {leftOvers.red -leftOvers.green -leftOvers.blue leftOvers.red}
+  expr0 "red - (C_emission.red +  C_l_fill.red +  C_l_key.red +  C_l_lighting_1.red +  C_l_lighting_2.red +  C_l_lighting_3.red +  C_l_muzzle_flash_1.red +  C_l_muzzle_flash_2.red +  C_l_muzzle_flash_3.red)"
+  channel1 {-leftOvers.red leftOvers.green -leftOvers.blue -leftOvers.green}
+  expr1 "green - (C_emission.green +  C_l_fill.green +  C_l_key.green +  C_l_lighting_1.green +  C_l_lighting_2.green +  C_l_lighting_3.green +  C_l_muzzle_flash_1.green +  C_l_muzzle_flash_2.green +  C_l_muzzle_flash_3.green)"
+  channel2 {-leftOvers.red -leftOvers.green leftOvers.blue -RGBA_default.blue}
+  expr2 "blue - (C_emission.blue +  C_l_fill.blue +  C_l_key.blue +  C_l_lighting_1.blue +  C_l_lighting_2.blue +  C_l_lighting_3.blue +  C_l_muzzle_flash_1.blue +  C_l_muzzle_flash_2.blue +  C_l_muzzle_flash_3.blue)"
+  channel3 {none none none -rgba.alpha}
+  name LeftOvers
+  label "\[knob expr3]"
+  xpos 168
+  ypos 17
+ }
+ Clamp {
+  channels leftOvers
+  maximum_enable false
+  name Clamp1
+  xpos 168
+  ypos 50
+ }
+set N222f700 [stack 0]
+ Shuffle {
+  in leftOvers
+  in2 rgba
+  alpha black
+  name AOV
+  xpos 168
+  ypos 118
+ }
+push $N222f700
+ Input {
+  inputs 0
+  name InputImg
+  xpos 0
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  Achannels {leftOvers.red leftOvers.green leftOvers.blue none}
+  name Merge2
+  xpos 0
+  ypos 56
+ }
+ Switch {
+  inputs 2
+  which {{parent.view_leftovers}}
+  name Switch1
+  label "view leftovers"
+  xpos 0
+  ypos 112
+ }
+ Output {
+  name Output1
+  xpos 0
+  ypos 178
+ }
+end_group

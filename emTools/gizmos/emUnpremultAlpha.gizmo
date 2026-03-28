@@ -1,4 +1,4 @@
-Gizmo {
+Group {
 name emUnpremultAlpha
 addUserKnob {20 User l "emUnpremult Alpha"}
 addUserKnob {26 autor l "" +STARTLINE T "<font color=\"grey\"> emUnpremult Alpha v1.1 | emateofabregas.com | 2024 </font>"}

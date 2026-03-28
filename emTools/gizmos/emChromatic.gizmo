@@ -4,7 +4,7 @@ Group {
  label "scale: \[value scale]"
  addUserKnob {20 User l emChromaticAberration}
  addUserKnob {7 scale R 0 4}
- scale 1.2
+ scale 1.05
  addUserKnob {26 gap01 l " " T " "}
  addUserKnob {26 autor l " " T "<font color='grey'>emChromaticAberration v1.0 | emateofabregas.com | 2025</font>"}
 }

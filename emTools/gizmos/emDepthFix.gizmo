@@ -1,5 +1,5 @@
 Group {
- name emDepthFix1
+ name emDepthFix
  knobChanged "import nuke\n\nn = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"fix_internal_edges\":\n    if n\['fix_internal_edges'].value() == True:\n        n.knobs()\['scale'].setEnabled(True)\n    else:\n        n.knobs()\['scale'].setEnabled(False)\n    \nif k.name() == \"fix_external_edges\":\n    if n\['fix_external_edges'].value() == True:\n        n.knobs()\['fix_internal_edges'].setEnabled(True)\n    else:\n        n.knobs()\['fix_internal_edges'].setEnabled(False)\n        n.knobs()\['fix_internal_edges'].setValue(False)"
  addUserKnob {20 User l emDepthFix t "Gizmo for use in case you have artifacts in your CG renders when you add depth of field. Add this node before your Zdefocus/Bokeh nodes."}
  addUserKnob {6 view_new_depth l "View New Depth" t "If you checkbox this knob, you have to reduce the f-stop if your viewer sees the changes." +STARTLINE}
@@ -12,7 +12,7 @@ Group {
  addUserKnob {41 scale +DISABLED T Normalize_depth.scale}
  addUserKnob {26 gap03 l " " T " "}
  addUserKnob {26 ""}
- addUserKnob {26 autor l "" +STARTLINE T "<font color=\"grey\">emDepthFix v1.4 | emateofabregas.com | 2024-2025</font>"}
+ addUserKnob {26 autor l "" +STARTLINE T "<font color=\"grey\">emDepthFix v1.4 | emateofabregas | 2024-2025</font>"}
 }
  Input {
   inputs 0
@@ -54,7 +54,7 @@ set N4b07900 [stack 0]
   disable {{!parent.fix_internal_edges}}
   addUserKnob {20 User}
   addUserKnob {7 scale t "The value of this knob depends on the size of your scene. Ideally, if you're render is small, you should play between 0-100, if it's in real scale, you have to play between 100-1000. The idea is you can jump between the preview of the new depth and check how it looks the new render with this node." R 1 1000}
-  scale 1
+  scale 1000
  }
  EdgeDetectWrapper {
   name EdgeDetect1
