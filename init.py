@@ -1,3 +1,6 @@
 import nuke
 nuke.pluginAddPath('emTools')
-nuke.pluginAddPath('gizmos')
+nuke.pluginAddPath("stamps")
+nuke.pluginAddPath("NukeSurvivalToolkit")
+nuke.pluginAddPath("BuddySystem")
+nuke.pluginAddPath("emEyesWork")
